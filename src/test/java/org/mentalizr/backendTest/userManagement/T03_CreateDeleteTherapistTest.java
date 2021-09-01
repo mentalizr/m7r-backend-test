@@ -1,7 +1,8 @@
-package org.mentalizr.backendTest;
+package org.mentalizr.backendTest.userManagement;
 
 import de.arthurpicht.utils.core.strings.Strings;
 import org.junit.jupiter.api.*;
+import org.mentalizr.backendTest.TestContext;
 import org.mentalizr.client.restService.sessionManagement.LoginService;
 import org.mentalizr.client.restService.sessionManagement.LogoutService;
 import org.mentalizr.client.restService.userAdmin.*;
@@ -14,8 +15,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T03_CreateDeleteTherapistTest {
 
+    private static final boolean active = true;
+    private static final String username = "autotest_therapist_01";
+    private static final String title = "Dr. med.";
+    private static final String firstname = "therapist_01_firstname";
+    private static final String lastname = "therapist_02_lastname";
+    private static final int gender = 0;
+    private static final String email = "thera01@example.org";
+    private static final String password = "super_secret";
+    private static String id;
+    private static String passwordHash;
+
     private static TestContext testContext;
-    private static TherapistAddSO therapistAddSOReturn;
 
     @BeforeAll
     public static void setup() {
@@ -40,28 +51,31 @@ public class T03_CreateDeleteTherapistTest {
     void createTherapist() {
         System.out.println("### createTherapist ###");
         TherapistAddSO therapistAddSO = new TherapistAddSO();
-        therapistAddSO.setActive(true);
-        therapistAddSO.setUsername("autotest_therapist_01");
-        therapistAddSO.setTitle("Dr. med");
-        therapistAddSO.setFirstname("thera01_firstname");
-        therapistAddSO.setLastname("thera02_lastname");
-        therapistAddSO.setGender(0);
-        therapistAddSO.setEmail("thera01@example.org");
-        therapistAddSO.setPassword("super_secret");
+        therapistAddSO.setActive(active);
+        therapistAddSO.setUsername(username);
+        therapistAddSO.setTitle(title);
+        therapistAddSO.setFirstname(firstname);
+        therapistAddSO.setLastname(lastname);
+        therapistAddSO.setGender(gender);
+        therapistAddSO.setEmail(email);
+        therapistAddSO.setPassword(password);
 
         try {
-            therapistAddSOReturn = new TherapistAddService(therapistAddSO, testContext.getRestCallContext()).call();
+            TherapistAddSO therapistAddSOReturn
+                    = new TherapistAddService(therapistAddSO, testContext.getRestCallContext()).call();
+            passwordHash = therapistAddSOReturn.getPasswordHash();
+            id = therapistAddSOReturn.getUuid();
 
-            assertEquals(therapistAddSO.isActive(), therapistAddSOReturn.isActive());
-            assertEquals(therapistAddSO.getUsername(), therapistAddSOReturn.getUsername());
-            assertEquals(therapistAddSO.getTitle(), therapistAddSOReturn.getTitle());
-            assertEquals(therapistAddSO.getFirstname(), therapistAddSOReturn.getFirstname());
-            assertEquals(therapistAddSO.getLastname(), therapistAddSOReturn.getLastname());
-            assertEquals(therapistAddSO.getGender(), therapistAddSOReturn.getGender());
-            assertEquals(therapistAddSO.getEmail(), therapistAddSOReturn.getEmail());
+            assertEquals(active, therapistAddSOReturn.isActive());
+            assertEquals(username, therapistAddSOReturn.getUsername());
+            assertEquals(title, therapistAddSOReturn.getTitle());
+            assertEquals(firstname, therapistAddSOReturn.getFirstname());
+            assertEquals(lastname, therapistAddSOReturn.getLastname());
+            assertEquals(gender, therapistAddSOReturn.getGender());
+            assertEquals(email, therapistAddSOReturn.getEmail());
             assertTrue(therapistAddSOReturn.hasUuid());
-            assertEquals(therapistAddSO.getPassword(), therapistAddSOReturn.getPassword());
-            assertFalse(Strings.isSpecified(therapistAddSOReturn.getPasswordHash()));
+            assertEquals(password, therapistAddSOReturn.getPassword());
+            assertTrue(Strings.isSpecified(therapistAddSOReturn.getPasswordHash()));
 
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
@@ -73,8 +87,6 @@ public class T03_CreateDeleteTherapistTest {
     void assertTherapistCreated() {
         System.out.println("### assert therapist created by calling 'getAll' method ###");
 
-        assertNotNull(therapistAddSOReturn, "therapistAddSOReturnn ist null!");
-
         try {
             TherapistRestoreCollectionSO therapistRestoreCollectionSO
                     = new TherapistGetAllService(testContext.getRestCallContext()).call();
@@ -82,15 +94,15 @@ public class T03_CreateDeleteTherapistTest {
             for (TherapistRestoreSO therapistRestoreSO : therapistRestoreCollectionSO.getCollection()) {
                 if (therapistRestoreSO.getUsername().equals("autotest_therapist_01")) {
 
-                    assertEquals(therapistRestoreSO.isActive(), therapistAddSOReturn.isActive());
-                    assertEquals(therapistRestoreSO.getUsername(), therapistAddSOReturn.getUsername());
-                    assertEquals(therapistRestoreSO.getTitle(), therapistAddSOReturn.getTitle());
-                    assertEquals(therapistRestoreSO.getFirstname(), therapistAddSOReturn.getFirstname());
-                    assertEquals(therapistRestoreSO.getLastname(), therapistAddSOReturn.getLastname());
-                    assertEquals(therapistRestoreSO.getGender(), therapistAddSOReturn.getGender());
-                    assertEquals(therapistRestoreSO.getEmail(), therapistAddSOReturn.getEmail());
-                    assertEquals(therapistRestoreSO.getUuid(), therapistAddSOReturn.getUuid());
-                    assertTrue(Strings.isSpecified(therapistAddSOReturn.getPasswordHash()));
+                    assertEquals(active, therapistRestoreSO.isActive());
+                    assertEquals(username, therapistRestoreSO.getUsername());
+                    assertEquals(title, therapistRestoreSO.getTitle());
+                    assertEquals(firstname, therapistRestoreSO.getFirstname());
+                    assertEquals(lastname, therapistRestoreSO.getLastname());
+                    assertEquals(gender, therapistRestoreSO.getGender());
+                    assertEquals(email, therapistRestoreSO.getEmail());
+                    assertEquals(id, therapistRestoreSO.getUuid());
+                    assertEquals(passwordHash, therapistRestoreSO.getPasswordHash());
 
                     found = true;
                     break;

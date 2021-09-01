@@ -1,6 +1,7 @@
-package org.mentalizr.backendTest;
+package org.mentalizr.backendTest.session;
 
 import org.junit.jupiter.api.*;
+import org.mentalizr.backendTest.TestContext;
 import org.mentalizr.client.restService.sessionManagement.LoginService;
 import org.mentalizr.client.restService.sessionManagement.LogoutService;
 import org.mentalizr.client.restService.sessionManagement.SessionStatusService;
