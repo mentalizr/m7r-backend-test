@@ -2,6 +2,10 @@ package org.mentalizr.backendTest.userManagement;
 
 import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.backendTest.entities.EntityManagementSession;
+import org.mentalizr.backendTest.entities.Program;
+import org.mentalizr.backendTest.entities.ProgramTest;
+import org.mentalizr.backendTest.entities.TestEntityException;
 import org.mentalizr.client.restService.sessionManagement.LoginService;
 import org.mentalizr.client.restService.sessionManagement.LogoutService;
 import org.mentalizr.client.restService.userAdmin.ProgramAddService;
@@ -19,57 +23,43 @@ public class T02_CreateDeleteProgramTest {
 
     private static TestContext testContext;
 
+    private static Program program;
+
     @BeforeAll
-    public static void setup() {
+    public static void setup() throws TestEntityException {
         System.out.println("### Setup ###");
+
         testContext = TestContext.getInstance();
+
+        EntityManagementSession entityManagementSession = new EntityManagementSession(testContext);
+        entityManagementSession.loginAsAdmin();
     }
 
-    @Test
-    @Order(1)
-    void login() {
-        System.out.println("### Login ###");
-        try {
-            new LoginService(testContext.getUser(), testContext.getPassword(), testContext.getRestCallContext()).call();
-        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            System.out.println("ERROR >>> " + e.getMessage());
-            fail(e);
-        }
+    @AfterAll
+    public static void cleanup() throws TestEntityException {
+        System.out.println("### Clean-up ###");
+
+        EntityManagementSession entityManagementSession = new EntityManagementSession(testContext);
+        entityManagementSession.logout();
     }
 
     @Test
     @Order(2)
     void addProgram() {
-        System.out.println("### createProgram ###");
-        ProgramSO programSO = new ProgramSO();
-        programSO.setProgramId("test");
-
+        program = new ProgramTest(testContext);
         try {
-            new ProgramAddService(programSO, testContext.getRestCallContext()).call();
-        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            System.out.println("ERROR >>> " + e.getMessage());
+            program.create();
+        } catch (TestEntityException e) {
             fail(e);
         }
     }
 
     @Test
     @Order(3)
-    void assertProgramCreated() {
-        System.out.println("### assert Program created by calling 'getAll' method ###");
-
+    void assertCreated() {
         try {
-            ProgramCollectionSO programCollectionSO = new ProgramGetAllService(testContext.getRestCallContext()).call();
-            boolean found = false;
-            for (ProgramSO programSO : programCollectionSO.getCollection()) {
-                if (programSO.getProgramId().equals("test")) {
-                    found = true;
-                    break;
-                }
-            }
-            assertTrue(found, "Created program not found");
-
-        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            System.out.println("ERROR >>> " + e.getMessage());
+            program.find();
+        } catch (TestEntityException e) {
             fail(e);
         }
     }
@@ -78,10 +68,10 @@ public class T02_CreateDeleteProgramTest {
     @Order(4)
     void deleteProgram() {
         System.out.println("### deleteProgram ###");
+
         try {
-            new ProgramDeleteService("test", testContext.getRestCallContext()).call();
-        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            System.out.println("ERROR >>> " + e.getMessage());
+            program.delete();
+        } catch (TestEntityException e) {
             fail(e);
         }
     }
@@ -91,33 +81,8 @@ public class T02_CreateDeleteProgramTest {
     void assertProgramDeleted() {
         System.out.println("### assert Program deleted by calling 'getAll' method ###");
 
-        try {
-            ProgramCollectionSO programCollectionSO = new ProgramGetAllService(testContext.getRestCallContext()).call();
-            boolean found = false;
-            for (ProgramSO programSO : programCollectionSO.getCollection()) {
-                if (programSO.getProgramId().equals("test")) {
-                    found = true;
-                    break;
-                }
-            }
-            assertFalse(found, "Created program not found");
-
-        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            System.out.println("ERROR >>> " + e.getMessage());
-            fail(e);
-        }
-    }
-
-    @Test
-    @Order(6)
-    void logout() {
-        System.out.println("### Logout ###");
-        try {
-            new LogoutService(testContext.getRestCallContext()).call();
-        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            System.out.println("ERROR >>> " + e.getMessage());
-            fail(e);
-        }
+        Exception exception = assertThrows(TestEntityException.class, () -> program.find());
+        assertEquals("Program [test] not found.", exception.getMessage());
     }
 
 }
