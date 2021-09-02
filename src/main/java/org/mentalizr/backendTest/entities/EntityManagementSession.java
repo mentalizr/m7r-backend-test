@@ -26,6 +26,18 @@ public class EntityManagementSession {
         }
     }
 
+    public void loginAsUser(String user, String password) throws TestEntityException {
+        try {
+            new LoginService(
+                    user,
+                    password,
+                    this.testContext.getRestCallContext()).call();
+        } catch (RestServiceHttpException | RestServiceConnectionException e) {
+            System.out.println("ERROR >>> " + e.getMessage());
+            throw new TestEntityException(e.getMessage(), e);
+        }
+    }
+
     public void logout() throws TestEntityException {
         try {
             new LogoutService(testContext.getRestCallContext()).call();
