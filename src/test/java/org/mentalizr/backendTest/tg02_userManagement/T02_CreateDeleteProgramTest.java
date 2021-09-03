@@ -16,7 +16,7 @@ public class T02_CreateDeleteProgramTest {
 
     @BeforeAll
     public static void setup() throws TestEntityException {
-        System.out.println("### Setup ###");
+        System.out.println(">>> setup >>>");
 
         testContext = TestContext.getInstance();
 
@@ -26,7 +26,7 @@ public class T02_CreateDeleteProgramTest {
 
     @AfterAll
     public static void cleanup() throws TestEntityException {
-        System.out.println("### Clean-up ###");
+        System.out.println("\n>>> clean-up >>>");
 
         session.logout();
     }
@@ -34,6 +34,8 @@ public class T02_CreateDeleteProgramTest {
     @Test
     @Order(2)
     void addProgram() {
+        System.out.println("\n>>> add program >>>");
+
         program = new ProgramTest(testContext);
         try {
             program.create();
@@ -45,6 +47,8 @@ public class T02_CreateDeleteProgramTest {
     @Test
     @Order(3)
     void assertCreated() {
+        System.out.println("\n>>> assert program is created >>>");
+
         try {
             program.find();
         } catch (TestEntityException | TestEntityNotFoundException e) {
@@ -55,7 +59,7 @@ public class T02_CreateDeleteProgramTest {
     @Test
     @Order(4)
     void deleteProgram() {
-        System.out.println("### deleteProgram ###");
+        System.out.println("\n>>> deleteProgram >>>");
 
         try {
             program.delete();
@@ -67,7 +71,7 @@ public class T02_CreateDeleteProgramTest {
     @Test
     @Order(5)
     void assertProgramDeleted() {
-        System.out.println("### assert Program deleted by calling 'getAll' method ###");
+        System.out.println("\n>>> assert program is deleted >>>");
 
         Exception exception = assertThrows(TestEntityNotFoundException.class, () -> program.find());
         assertEquals("Program [test] not found.", exception.getMessage());

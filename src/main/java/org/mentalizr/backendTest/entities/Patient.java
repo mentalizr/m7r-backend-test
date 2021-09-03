@@ -55,7 +55,7 @@ public abstract class Patient extends TestEntity {
         return patientAddSO;
     }
 
-    public void create(String therapistId, String programId) throws TestEntityException {
+    public PatientAddSO create(String therapistId, String programId) throws TestEntityException {
         PatientAddSO patientAddSO = getPatientAddSO(therapistId, programId);
 
         try {
@@ -64,6 +64,8 @@ public abstract class Patient extends TestEntity {
 
             this.id = patientAddSOReturn.getUuid();
             this.passwordHash = patientAddSOReturn.getPasswordHash();
+
+            return patientAddSO;
 
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             throw new TestEntityException(e.getMessage(), e);

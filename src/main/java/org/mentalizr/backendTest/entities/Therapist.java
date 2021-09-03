@@ -1,11 +1,15 @@
 package org.mentalizr.backendTest.entities;
 
 import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.client.restService.userAdmin.ProgramGetAllService;
 import org.mentalizr.client.restService.userAdmin.TherapistAddService;
 import org.mentalizr.client.restService.userAdmin.TherapistDeleteService;
+import org.mentalizr.client.restService.userAdmin.TherapistGetAllService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
-import org.mentalizr.serviceObjects.userManagement.TherapistAddSO;
+import org.mentalizr.serviceObjects.userManagement.*;
+
+import java.util.Optional;
 
 public abstract class Therapist extends TestEntity {
 
@@ -53,7 +57,7 @@ public abstract class Therapist extends TestEntity {
         return therapistAddSO;
     }
 
-    public void create() throws TestEntityException {
+    public TherapistAddSO create() throws TestEntityException {
         TherapistAddSO therapistAddSO = getTherapistAddSO();
 
         try {
@@ -62,6 +66,8 @@ public abstract class Therapist extends TestEntity {
 
             this.id = therapistAddSOReturn.getUuid();
             this.passwordHash = therapistAddSOReturn.getPasswordHash();
+
+            return therapistAddSOReturn;
 
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             throw new TestEntityException(e.getMessage(), e);
@@ -77,5 +83,25 @@ public abstract class Therapist extends TestEntity {
         }
     }
 
+    public TherapistRestoreSO find() throws TestEntityException, TestEntityNotFoundException {
+        TherapistRestoreCollectionSO therapistRestoreCollectionSO;
+        try {
+            therapistRestoreCollectionSO = new TherapistGetAllService(testContext.getRestCallContext()).call();
+        } catch (RestServiceHttpException | RestServiceConnectionException e) {
+            throw new TestEntityException(e.getMessage(), e);
+        }
+
+        Optional<TherapistRestoreSO> therapistRestoreSOOptional
+                = therapistRestoreCollectionSO
+                .getCollection()
+                .stream()
+                .filter(therapistRestoreSO -> therapistRestoreSO.getUsername().equals(getUsername()))
+                .findAny();
+
+        if (therapistRestoreSOOptional.isEmpty())
+            throw new TestEntityNotFoundException("Therapist [" + getUsername() + "] not found.");
+
+        return therapistRestoreSOOptional.get();
+    }
 
 }
