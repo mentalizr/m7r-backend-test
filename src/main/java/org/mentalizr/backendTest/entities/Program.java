@@ -43,7 +43,7 @@ public abstract class Program extends TestEntity {
         }
     }
 
-    public ProgramSO find() throws TestEntityException {
+    public ProgramSO find() throws TestEntityException, TestEntityNotFoundException {
         ProgramCollectionSO programCollectionSO;
         try {
             programCollectionSO = new ProgramGetAllService(testContext.getRestCallContext()).call();
@@ -57,7 +57,7 @@ public abstract class Program extends TestEntity {
             }
         }
 
-        throw new TestEntityException("Program [" + getProgramId() + "] not found.");
+        throw new TestEntityNotFoundException("Program [" + getProgramId() + "] not found.");
     }
 
 }

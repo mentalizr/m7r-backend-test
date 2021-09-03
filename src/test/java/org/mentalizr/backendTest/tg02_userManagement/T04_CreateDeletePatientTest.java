@@ -20,8 +20,8 @@ public class T04_CreateDeletePatientTest {
 
         testContext = TestContext.getInstance();
 
-        EntityManagementSession entityManagementSession = new EntityManagementSession(testContext);
-        entityManagementSession.loginAsAdmin();
+        Session session = new Session(testContext);
+        session.loginAsAdmin();
 
         program = new ProgramTest(testContext);
         program.create();
@@ -37,8 +37,8 @@ public class T04_CreateDeletePatientTest {
         therapist.delete();
         program.delete();
 
-        EntityManagementSession entityManagementSession = new EntityManagementSession(testContext);
-        entityManagementSession.logout();
+        Session session = new Session(testContext);
+        session.logout();
     }
 
     @Test

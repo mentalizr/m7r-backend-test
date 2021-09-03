@@ -2,10 +2,7 @@ package org.mentalizr.backendTest.tg02_userManagement;
 
 import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.TestContext;
-import org.mentalizr.backendTest.entities.EntityManagementSession;
-import org.mentalizr.backendTest.entities.Program;
-import org.mentalizr.backendTest.entities.ProgramTest;
-import org.mentalizr.backendTest.entities.TestEntityException;
+import org.mentalizr.backendTest.entities.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class T02_CreateDeleteProgramTest {
 
     private static TestContext testContext;
+    private static Session session;
 
     private static Program program;
 
@@ -22,16 +20,15 @@ public class T02_CreateDeleteProgramTest {
 
         testContext = TestContext.getInstance();
 
-        EntityManagementSession entityManagementSession = new EntityManagementSession(testContext);
-        entityManagementSession.loginAsAdmin();
+        session = new Session(testContext);
+        session.loginAsAdmin();
     }
 
     @AfterAll
     public static void cleanup() throws TestEntityException {
         System.out.println("### Clean-up ###");
 
-        EntityManagementSession entityManagementSession = new EntityManagementSession(testContext);
-        entityManagementSession.logout();
+        session.logout();
     }
 
     @Test
@@ -50,7 +47,7 @@ public class T02_CreateDeleteProgramTest {
     void assertCreated() {
         try {
             program.find();
-        } catch (TestEntityException e) {
+        } catch (TestEntityException | TestEntityNotFoundException e) {
             fail(e);
         }
     }
@@ -72,7 +69,7 @@ public class T02_CreateDeleteProgramTest {
     void assertProgramDeleted() {
         System.out.println("### assert Program deleted by calling 'getAll' method ###");
 
-        Exception exception = assertThrows(TestEntityException.class, () -> program.find());
+        Exception exception = assertThrows(TestEntityNotFoundException.class, () -> program.find());
         assertEquals("Program [test] not found.", exception.getMessage());
     }
 

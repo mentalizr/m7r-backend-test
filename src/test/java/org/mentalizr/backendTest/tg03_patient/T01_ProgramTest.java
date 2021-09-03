@@ -17,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class T01_ProgramTest {
 
     private static TestContext testContext;
+    private static Session session;
+
     private static Program program;
     private static Therapist therapist;
     private static Patient patient;
@@ -27,8 +29,8 @@ public class T01_ProgramTest {
 
         testContext = TestContext.getInstance();
 
-        EntityManagementSession entityManagementSession = new EntityManagementSession(testContext);
-        entityManagementSession.loginAsAdmin();
+        session = new Session(testContext);
+        session.loginAsAdmin();
 
         program = new ProgramTest(testContext);
         program.create();
@@ -39,24 +41,23 @@ public class T01_ProgramTest {
         patient = new Patient01(testContext);
         patient.create(therapist.getId(), program.getProgramId());
 
-        entityManagementSession.logout();
+        session.logout();
 
-        entityManagementSession.loginAsUser(patient.getUsername(), patient.getPassword());
+        session.loginAsUser(patient.getUsername(), patient.getPassword());
     }
 
     @AfterAll
     public static void cleanup() throws TestEntityException {
         System.out.println("### Clean-up ###");
 
-        EntityManagementSession entityManagementSession = new EntityManagementSession(testContext);
-        entityManagementSession.logout();
-        entityManagementSession.loginAsAdmin();
+        session.logout();
+        session.loginAsAdmin();
 
         patient.delete();
         therapist.delete();
         program.delete();
 
-        entityManagementSession.logout();
+        session.logout();
     }
 
     @Test
@@ -84,7 +85,7 @@ public class T01_ProgramTest {
                     "        },\n" +
                     "        {\n" +
                     "            \"id\": \"test__info_11\",\n" +
-                    "            \"name\": \"Zweite Infoseite-Test\"\n" +
+                     "            \"name\": \"Zweite Infoseite-Test\"\n" +
                     "        },\n" +
                     "        {\n" +
                     "            \"id\": \"test__info_2\",\n" +
@@ -201,44 +202,6 @@ public class T01_ProgramTest {
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }
-
-
-
     }
-
-//    @Test
-//    @Order(1)
-//    void login() {
-//        System.out.println("### Login ###");
-//        try {
-//            new LoginService(testContext.getUser(), testContext.getPassword(), testContext.getRestCallContext()).call();
-//        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-//            System.out.println("ERROR >>> " + e.getMessage());
-//            fail(e);
-//        }
-//    }
-//
-//    @Test
-//    @Order(2)
-//    void addProgram() {
-//        System.out.println("### createProgram ###");
-//        ProgramSO programSO = new ProgramSO();
-//        programSO.setProgramId(programName);
-//
-//        try {
-//            new ProgramAddService(programSO, testContext.getRestCallContext()).call();
-//        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-//            System.out.println("ERROR >>> " + e.getMessage());
-//            fail(e);
-//        }
-//    }
-//
-//    @Test
-//    @Order(3)
-//    void getProgram() {
-//        System.out.println("### patient/program ###");
-//
-//
-//    }
 
 }

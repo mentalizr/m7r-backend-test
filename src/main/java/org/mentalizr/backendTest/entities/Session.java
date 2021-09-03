@@ -6,11 +6,11 @@ import org.mentalizr.client.restService.sessionManagement.LogoutService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
 
-public class EntityManagementSession {
+public class Session {
 
     private final TestContext testContext;
 
-    public EntityManagementSession(TestContext testContext) {
+    public Session(TestContext testContext) {
         this.testContext = testContext;
     }
 
