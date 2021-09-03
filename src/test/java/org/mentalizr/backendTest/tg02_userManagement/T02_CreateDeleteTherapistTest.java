@@ -10,7 +10,7 @@ import org.mentalizr.serviceObjects.userManagement.TherapistRestoreSO;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T03_CreateDeleteTherapistTest {
+public class T02_CreateDeleteTherapistTest {
 
     private static TestContext testContext;
     private static Session session;
@@ -35,7 +35,7 @@ public class T03_CreateDeleteTherapistTest {
     }
 
     @Test
-    @Order(2)
+    @Order(1)
     void createTherapist() {
         System.out.println("\n>>> create therapist >>>");
 
@@ -60,7 +60,7 @@ public class T03_CreateDeleteTherapistTest {
     }
 
     @Test
-    @Order(3)
+    @Order(2)
     void assertTherapistCreated() {
         System.out.println("\n>>> assert therapist is created >>>");
 
@@ -83,7 +83,7 @@ public class T03_CreateDeleteTherapistTest {
     }
 
     @Test
-    @Order(4)
+    @Order(3)
     void deleteTherapist() {
         System.out.println("\n>>> delete therapist >>>");
 
@@ -95,7 +95,7 @@ public class T03_CreateDeleteTherapistTest {
     }
 
     @Test
-    @Order(5)
+    @Order(4)
     void assertTherapistDeleted() {
         System.out.println("\n>>> assert therapist is deleted >>>");
 

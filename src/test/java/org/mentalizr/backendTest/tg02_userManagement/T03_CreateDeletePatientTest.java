@@ -5,11 +5,13 @@ import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.TestContext;
 import org.mentalizr.backendTest.entities.*;
 import org.mentalizr.serviceObjects.userManagement.PatientAddSO;
+import org.mentalizr.serviceObjects.userManagement.PatientRestoreSO;
+import org.mentalizr.serviceObjects.userManagement.TherapistRestoreSO;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T04_CreateDeletePatientTest {
+public class T03_CreateDeletePatientTest {
 
     private static TestContext testContext;
     private static Session session;
@@ -69,6 +71,28 @@ public class T04_CreateDeletePatientTest {
     }
 
     @Test
+    @Order(2)
+    void assertPatientCreated() {
+        System.out.println("\n>>> assert patient is created >>>");
+
+        try {
+            PatientRestoreSO patientRestoreSO = patient.find();
+
+            assertEquals(patient.isActive(), patientRestoreSO.isActive());
+            assertEquals(patient.getUsername(), patientRestoreSO.getUsername());
+            assertEquals(patient.getFirstname(), patientRestoreSO.getFirstname());
+            assertEquals(patient.getLastname(), patientRestoreSO.getLastname());
+            assertEquals(patient.getGender(), patientRestoreSO.getGender());
+            assertEquals(patient.getEmail(), patientRestoreSO.getEmail());
+            assertEquals(patient.getId(), patientRestoreSO.getUuid());
+            assertEquals(patient.getPasswordHash(), patientRestoreSO.getPasswordHash());
+
+        } catch (TestEntityException | TestEntityNotFoundException e) {
+            fail(e);
+        }
+    }
+
+    @Test
     @Order(3)
     public void deletePatient() {
         System.out.println("\n>>> delete patient >>>");
@@ -78,6 +102,15 @@ public class T04_CreateDeletePatientTest {
         } catch (TestEntityException e) {
             fail(e);
         }
+    }
+
+    @Test
+    @Order(4)
+    void assertPatientDeleted() {
+        System.out.println("\n>>> assert patient is deleted >>>");
+
+        Exception exception = assertThrows(TestEntityException.class, () -> patient.find());
+        assertEquals("Patient [" + patient.getUsername() + "] not found.", exception.getMessage());
     }
 
 }

@@ -25,7 +25,7 @@ public class T01_ProgramTest {
 
     @BeforeAll
     public static void setup() throws TestEntityException {
-        System.out.println("### Setup ###");
+        System.out.println("\n>>> Setup >>>");
 
         testContext = TestContext.getInstance();
 
@@ -48,7 +48,7 @@ public class T01_ProgramTest {
 
     @AfterAll
     public static void cleanup() throws TestEntityException {
-        System.out.println("### Clean-up ###");
+        System.out.println("\n>>> Clean-up >>>");
 
         session.logout();
         session.loginAsAdmin();
@@ -62,7 +62,7 @@ public class T01_ProgramTest {
 
     @Test
     void program() {
-        System.out.println("### program ###");
+        System.out.println("\n>>> program >>>");
 
         ProgramSO programSO;
         try {

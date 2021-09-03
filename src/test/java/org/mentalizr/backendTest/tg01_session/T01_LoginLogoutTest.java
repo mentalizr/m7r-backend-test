@@ -18,18 +18,17 @@ public class T01_LoginLogoutTest {
 
     @BeforeAll
     public static void setup() {
-        System.out.println("### Setup ###");
+        System.out.println("\n>>> setup >>>");
         testContext = TestContext.getInstance();
     }
 
     @Test
     @Order(1)
     void login() {
-        System.out.println("### Login ###");
+        System.out.println("\n>>> login >>>");
         try {
             new LoginService(testContext.getUser(), testContext.getPassword(), testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            System.out.println("ERROR >>> " + e.getMessage());
             fail(e);
         }
     }
@@ -37,12 +36,11 @@ public class T01_LoginLogoutTest {
     @Test
     @Order(2)
     void status() {
-        System.out.println("### Status ###");
+        System.out.println("\n>>> status >>>");
         try {
             SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
             assertTrue(sessionStatusSO.isValid());
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            System.out.println("ERROR >>> " + e.getMessage());
             fail(e);
         }
     }
@@ -50,11 +48,10 @@ public class T01_LoginLogoutTest {
     @Test
     @Order(3)
     void logout() {
-        System.out.println("### Logout ###");
+        System.out.println("\n>>> logout >>>");
         try {
             new LogoutService(testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            System.out.println("ERROR >>> " + e.getMessage());
             fail(e);
         }
     }
@@ -62,7 +59,7 @@ public class T01_LoginLogoutTest {
     @Test
     @Order(4)
     void statusAfterLogout() {
-        System.out.println("### Status after Logout ###");
+        System.out.println("\n>>> status after Logout >>>");
         try {
             SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
             assertFalse(sessionStatusSO.isValid());

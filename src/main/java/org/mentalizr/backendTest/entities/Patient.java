@@ -1,14 +1,12 @@
 package org.mentalizr.backendTest.entities;
 
 import org.mentalizr.backendTest.TestContext;
-import org.mentalizr.client.restService.userAdmin.PatientAddService;
-import org.mentalizr.client.restService.userAdmin.PatientDeleteService;
-import org.mentalizr.client.restService.userAdmin.TherapistAddService;
-import org.mentalizr.client.restService.userAdmin.TherapistDeleteService;
+import org.mentalizr.client.restService.userAdmin.*;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
-import org.mentalizr.serviceObjects.userManagement.PatientAddSO;
-import org.mentalizr.serviceObjects.userManagement.TherapistAddSO;
+import org.mentalizr.serviceObjects.userManagement.*;
+
+import java.util.Optional;
 
 public abstract class Patient extends TestEntity {
 
@@ -65,7 +63,7 @@ public abstract class Patient extends TestEntity {
             this.id = patientAddSOReturn.getUuid();
             this.passwordHash = patientAddSOReturn.getPasswordHash();
 
-            return patientAddSO;
+            return patientAddSOReturn;
 
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             throw new TestEntityException(e.getMessage(), e);
@@ -77,6 +75,14 @@ public abstract class Patient extends TestEntity {
             new PatientDeleteService(getUsername(), testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             System.out.println("ERROR >>> " + e.getMessage());
+            throw new TestEntityException(e.getMessage(), e);
+        }
+    }
+
+    public PatientRestoreSO find() throws TestEntityException, TestEntityNotFoundException {
+        try {
+            return new PatientGetService(getUsername(), testContext.getRestCallContext()).call();
+        } catch (RestServiceHttpException | RestServiceConnectionException e) {
             throw new TestEntityException(e.getMessage(), e);
         }
     }

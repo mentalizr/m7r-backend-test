@@ -7,7 +7,7 @@ import org.mentalizr.backendTest.entities.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T02_CreateDeleteProgramTest {
+public class T01_CreateDeleteProgramTest {
 
     private static TestContext testContext;
     private static Session session;
@@ -16,7 +16,7 @@ public class T02_CreateDeleteProgramTest {
 
     @BeforeAll
     public static void setup() throws TestEntityException {
-        System.out.println(">>> setup >>>");
+        System.out.println("\n>>> setup >>>");
 
         testContext = TestContext.getInstance();
 
@@ -32,7 +32,7 @@ public class T02_CreateDeleteProgramTest {
     }
 
     @Test
-    @Order(2)
+    @Order(1)
     void addProgram() {
         System.out.println("\n>>> add program >>>");
 
@@ -45,7 +45,7 @@ public class T02_CreateDeleteProgramTest {
     }
 
     @Test
-    @Order(3)
+    @Order(2)
     void assertCreated() {
         System.out.println("\n>>> assert program is created >>>");
 
@@ -57,7 +57,7 @@ public class T02_CreateDeleteProgramTest {
     }
 
     @Test
-    @Order(4)
+    @Order(3)
     void deleteProgram() {
         System.out.println("\n>>> deleteProgram >>>");
 
@@ -69,7 +69,7 @@ public class T02_CreateDeleteProgramTest {
     }
 
     @Test
-    @Order(5)
+    @Order(4)
     void assertProgramDeleted() {
         System.out.println("\n>>> assert program is deleted >>>");
 
