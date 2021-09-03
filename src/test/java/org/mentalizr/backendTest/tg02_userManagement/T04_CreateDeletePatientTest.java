@@ -1,4 +1,4 @@
-package org.mentalizr.backendTest.userManagement;
+package org.mentalizr.backendTest.tg02_userManagement;
 
 import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.TestContext;

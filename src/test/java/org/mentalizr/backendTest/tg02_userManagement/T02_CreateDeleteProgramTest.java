@@ -1,4 +1,4 @@
-package org.mentalizr.backendTest.userManagement;
+package org.mentalizr.backendTest.tg02_userManagement;
 
 import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.TestContext;
@@ -6,15 +6,6 @@ import org.mentalizr.backendTest.entities.EntityManagementSession;
 import org.mentalizr.backendTest.entities.Program;
 import org.mentalizr.backendTest.entities.ProgramTest;
 import org.mentalizr.backendTest.entities.TestEntityException;
-import org.mentalizr.client.restService.sessionManagement.LoginService;
-import org.mentalizr.client.restService.sessionManagement.LogoutService;
-import org.mentalizr.client.restService.userAdmin.ProgramAddService;
-import org.mentalizr.client.restService.userAdmin.ProgramDeleteService;
-import org.mentalizr.client.restService.userAdmin.ProgramGetAllService;
-import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
-import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
-import org.mentalizr.serviceObjects.userManagement.ProgramCollectionSO;
-import org.mentalizr.serviceObjects.userManagement.ProgramSO;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,4 +1,4 @@
-package org.mentalizr.backendTest.session;
+package org.mentalizr.backendTest.tg01_session;
 
 import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.TestContext;
