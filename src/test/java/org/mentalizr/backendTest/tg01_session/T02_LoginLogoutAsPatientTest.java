@@ -1,7 +1,9 @@
 package org.mentalizr.backendTest.tg01_session;
 
+import de.arthurpicht.utils.core.strings.Strings;
 import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.backendTest.entities.*;
 import org.mentalizr.client.restService.sessionManagement.LoginService;
 import org.mentalizr.client.restService.sessionManagement.LogoutService;
 import org.mentalizr.client.restService.sessionManagement.SessionStatusService;
@@ -12,14 +14,47 @@ import org.mentalizr.serviceObjects.SessionStatusSO;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T01_LoginLogoutTest {
+public class T02_LoginLogoutAsPatientTest {
 
     private static TestContext testContext;
+    private static Session session;
+
+    private static Program program;
+    private static Therapist therapist;
+    private static Patient patient;
 
     @BeforeAll
-    public static void setup() {
-        System.out.println("\n>>> setup >>>");
+    public static void setup() throws TestEntityException {
+        System.out.println("\n>>> Setup >>>");
+
         testContext = TestContext.getInstance();
+
+        session = new Session(testContext);
+        session.loginAsAdmin();
+
+        program = new ProgramTest(testContext);
+        program.create();
+
+        therapist = new Therapist01(testContext);
+        therapist.create();
+
+        patient = new Patient01(testContext);
+        patient.create(therapist.getId(), program.getProgramId());
+
+        session.logout();
+    }
+
+    @AfterAll
+    public static void cleanup() throws TestEntityException {
+        System.out.println("\n>>> Clean-up >>>");
+
+        session.loginAsAdmin();
+
+        patient.delete();
+        therapist.delete();
+        program.delete();
+
+        session.logout();
     }
 
     @Test
@@ -27,7 +62,7 @@ public class T01_LoginLogoutTest {
     void login() {
         System.out.println("\n>>> login >>>");
         try {
-            new LoginService(testContext.getUser(), testContext.getPassword(), testContext.getRestCallContext()).call();
+            new LoginService(patient.getUsername(), patient.getPassword(), testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }
@@ -36,10 +71,12 @@ public class T01_LoginLogoutTest {
     @Test
     @Order(2)
     void status() {
-        System.out.println("\n>>> status >>>");
+        System.out.println("\n>>> session status >>>");
         try {
             SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
             assertTrue(sessionStatusSO.isValid());
+            assertEquals("PATIENT", sessionStatusSO.getUserRole());
+            assertTrue(Strings.isSpecified(sessionStatusSO.getSessionId()));
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }
@@ -68,5 +105,4 @@ public class T01_LoginLogoutTest {
             fail(e);
         }
     }
-
 }
