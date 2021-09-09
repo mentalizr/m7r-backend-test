@@ -73,6 +73,7 @@ public class T01_ProgramTest {
 
             String programSOAsJsonExpected = "\n" +
                     "{\n" +
+                    "    \"blocking\": false,\n" +
                     "    \"id\": \"test\",\n" +
                     "    \"infotexts\": [\n" +
                     "        {\n" +
@@ -85,7 +86,7 @@ public class T01_ProgramTest {
                     "        },\n" +
                     "        {\n" +
                     "            \"id\": \"test__info_11\",\n" +
-                     "            \"name\": \"Zweite Infoseite-Test\"\n" +
+                    "            \"name\": \"Zweite Infoseite-Test\"\n" +
                     "        },\n" +
                     "        {\n" +
                     "            \"id\": \"test__info_2\",\n" +
