@@ -6,7 +6,6 @@ import org.mentalizr.backendTest.TestContext;
 import org.mentalizr.backendTest.entities.*;
 import org.mentalizr.serviceObjects.userManagement.PatientAddSO;
 import org.mentalizr.serviceObjects.userManagement.PatientRestoreSO;
-import org.mentalizr.serviceObjects.userManagement.TherapistRestoreSO;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,6 +63,9 @@ public class T03_CreateDeletePatientTest {
             assertTrue(Strings.isSpecified(patientAddSOReturn.getUuid()));
             assertEquals(patient.getPassword(), patientAddSOReturn.getPassword());
             assertTrue(Strings.isSpecified(patientAddSOReturn.getPasswordHash()));
+            assertEquals(program.getProgramId(), patientAddSOReturn.getProgramId());
+            assertEquals(patient.isBlocking(), patientAddSOReturn.isBlocking());
+            assertEquals(therapist.getId(), patientAddSOReturn.getTherapistId());
 
         } catch (TestEntityException e) {
             fail(e);
@@ -72,20 +74,46 @@ public class T03_CreateDeletePatientTest {
 
     @Test
     @Order(2)
-    void assertPatientCreated() {
-        System.out.println("\n>>> assert patient is created >>>");
+    void assertPatientCreatedByGet() {
+        System.out.println("\n>>> assert patient is created (get) >>>");
+
+        try {
+            PatientRestoreSO patientRestoreSO = patient.get();
+
+            assertEquals(patient.getId(), patientRestoreSO.getUuid());
+            assertEquals(patient.isActive(), patientRestoreSO.isActive());
+            assertEquals(patient.getUsername(), patientRestoreSO.getUsername());
+            assertEquals(patient.getPasswordHash(), patientRestoreSO.getPasswordHash());
+            assertEquals(patient.getEmail(), patientRestoreSO.getEmail());
+            assertEquals(patient.getFirstname(), patientRestoreSO.getFirstname());
+            assertEquals(patient.getLastname(), patientRestoreSO.getLastname());
+            assertEquals(patient.getGender(), patientRestoreSO.getGender());
+            assertEquals(patient.isBlocking(), patientRestoreSO.isBlocking());
+            assertEquals(therapist.getId(), patientRestoreSO.getTherapistId());
+
+        } catch (TestEntityException e) {
+            fail(e);
+        }
+    }
+
+    @Test
+    @Order(3)
+    void assertPatientCreatedByFind() {
+        System.out.println("\n>>> assert patient is created (get) >>>");
 
         try {
             PatientRestoreSO patientRestoreSO = patient.find();
 
+            assertEquals(patient.getId(), patientRestoreSO.getUuid());
             assertEquals(patient.isActive(), patientRestoreSO.isActive());
             assertEquals(patient.getUsername(), patientRestoreSO.getUsername());
+            assertEquals(patient.getPasswordHash(), patientRestoreSO.getPasswordHash());
+            assertEquals(patient.getEmail(), patientRestoreSO.getEmail());
             assertEquals(patient.getFirstname(), patientRestoreSO.getFirstname());
             assertEquals(patient.getLastname(), patientRestoreSO.getLastname());
             assertEquals(patient.getGender(), patientRestoreSO.getGender());
-            assertEquals(patient.getEmail(), patientRestoreSO.getEmail());
-            assertEquals(patient.getId(), patientRestoreSO.getUuid());
-            assertEquals(patient.getPasswordHash(), patientRestoreSO.getPasswordHash());
+            assertEquals(patient.isBlocking(), patientRestoreSO.isBlocking());
+            assertEquals(therapist.getId(), patientRestoreSO.getTherapistId());
 
         } catch (TestEntityException | TestEntityNotFoundException e) {
             fail(e);
@@ -93,7 +121,7 @@ public class T03_CreateDeletePatientTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     public void deletePatient() {
         System.out.println("\n>>> delete patient >>>");
 
@@ -105,11 +133,11 @@ public class T03_CreateDeletePatientTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void assertPatientDeleted() {
         System.out.println("\n>>> assert patient is deleted >>>");
 
-        Exception exception = assertThrows(TestEntityException.class, () -> patient.find());
+        Exception exception = assertThrows(TestEntityException.class, () -> patient.get());
         assertEquals("Patient [" + patient.getUsername() + "] not found.", exception.getMessage());
     }
 

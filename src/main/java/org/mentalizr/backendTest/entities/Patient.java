@@ -6,6 +6,7 @@ import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionExc
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
 import org.mentalizr.serviceObjects.userManagement.*;
 
+import java.util.List;
 import java.util.Optional;
 
 public abstract class Patient extends TestEntity {
@@ -31,6 +32,8 @@ public abstract class Patient extends TestEntity {
 
     public abstract String getPassword();
 
+    public abstract boolean isBlocking();
+
     public String getPasswordHash() {
         return this.passwordHash;
     }
@@ -50,6 +53,7 @@ public abstract class Patient extends TestEntity {
         patientAddSO.setPassword(getPassword());
         patientAddSO.setTherapistId(therapistId);
         patientAddSO.setProgramId(programId);
+        patientAddSO.setBlocking(isBlocking());
         return patientAddSO;
     }
 
@@ -79,12 +83,33 @@ public abstract class Patient extends TestEntity {
         }
     }
 
-    public PatientRestoreSO find() throws TestEntityException, TestEntityNotFoundException {
+    public PatientRestoreSO get() throws TestEntityException {
         try {
             return new PatientGetService(getUsername(), testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             throw new TestEntityException(e.getMessage(), e);
         }
+    }
+
+    public PatientRestoreSO find() throws TestEntityException, TestEntityNotFoundException {
+        PatientRestoreCollectionSO patientRestoreCollectionSO;
+        try {
+            patientRestoreCollectionSO = new PatientGetAllService(testContext.getRestCallContext()).call();
+        } catch (RestServiceHttpException | RestServiceConnectionException e) {
+            throw new TestEntityException(e.getMessage(), e);
+        }
+
+        Optional<PatientRestoreSO> patientRestoreSOOptional
+                = patientRestoreCollectionSO
+                .getCollection()
+                .stream()
+                .filter(patientRestoreSO -> patientRestoreSO.getUsername().equals(getUsername()))
+                .findAny();
+
+        if (patientRestoreSOOptional.isEmpty())
+            throw new TestEntityNotFoundException("Patient [" + getUsername() + "] not found.");
+
+        return patientRestoreSOOptional.get();
     }
 
 }

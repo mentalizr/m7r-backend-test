@@ -43,4 +43,9 @@ public class Patient01 extends Patient {
         return "topsecret";
     }
 
+    @Override
+    public boolean isBlocking() {
+        return true;
+    }
+
 }

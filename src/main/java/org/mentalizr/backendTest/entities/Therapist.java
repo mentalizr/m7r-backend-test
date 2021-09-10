@@ -1,10 +1,7 @@
 package org.mentalizr.backendTest.entities;
 
 import org.mentalizr.backendTest.TestContext;
-import org.mentalizr.client.restService.userAdmin.ProgramGetAllService;
-import org.mentalizr.client.restService.userAdmin.TherapistAddService;
-import org.mentalizr.client.restService.userAdmin.TherapistDeleteService;
-import org.mentalizr.client.restService.userAdmin.TherapistGetAllService;
+import org.mentalizr.client.restService.userAdmin.*;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
 import org.mentalizr.serviceObjects.userManagement.*;
@@ -79,6 +76,14 @@ public abstract class Therapist extends TestEntity {
             new TherapistDeleteService(getUsername(), testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             System.out.println("ERROR >>> " + e.getMessage());
+            throw new TestEntityException(e.getMessage(), e);
+        }
+    }
+
+    public TherapistRestoreSO get() throws TestEntityException {
+        try {
+            return new TherapistGetService(getUsername(), testContext.getRestCallContext()).call();
+        } catch (RestServiceHttpException | RestServiceConnectionException e) {
             throw new TestEntityException(e.getMessage(), e);
         }
     }

@@ -61,8 +61,31 @@ public class T02_CreateDeleteTherapistTest {
 
     @Test
     @Order(2)
-    void assertTherapistCreated() {
-        System.out.println("\n>>> assert therapist is created >>>");
+    void assertTherapistCreatedByGet() {
+        System.out.println("\n>>> assert therapist is created (get) >>>");
+
+        try {
+            TherapistRestoreSO therapistRestoreSO = therapist.get();
+
+            assertEquals(therapist.isActive(), therapistRestoreSO.isActive());
+            assertEquals(therapist.getUsername(), therapistRestoreSO.getUsername());
+            assertEquals(therapist.getTitle(), therapistRestoreSO.getTitle());
+            assertEquals(therapist.getFirstname(), therapistRestoreSO.getFirstname());
+            assertEquals(therapist.getLastname(), therapistRestoreSO.getLastname());
+            assertEquals(therapist.getGender(), therapistRestoreSO.getGender());
+            assertEquals(therapist.getEmail(), therapistRestoreSO.getEmail());
+            assertEquals(therapist.getId(), therapistRestoreSO.getUuid());
+            assertEquals(therapist.getPasswordHash(), therapistRestoreSO.getPasswordHash());
+
+        } catch (TestEntityException e) {
+            fail(e);
+        }
+    }
+
+    @Test
+    @Order(3)
+    void assertTherapistCreatedByFind() {
+        System.out.println("\n>>> assert therapist is created (find) >>>");
 
         try {
             TherapistRestoreSO therapistRestoreSO = therapist.find();
@@ -83,7 +106,7 @@ public class T02_CreateDeleteTherapistTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     void deleteTherapist() {
         System.out.println("\n>>> delete therapist >>>");
 
@@ -95,7 +118,7 @@ public class T02_CreateDeleteTherapistTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void assertTherapistDeleted() {
         System.out.println("\n>>> assert therapist is deleted >>>");
 
