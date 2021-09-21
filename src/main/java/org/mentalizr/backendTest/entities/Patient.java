@@ -1,12 +1,12 @@
 package org.mentalizr.backendTest.entities;
 
 import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.client.restService.test.FormDataCleanService;
 import org.mentalizr.client.restService.userAdmin.*;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
 import org.mentalizr.serviceObjects.userManagement.*;
 
-import java.util.List;
 import java.util.Optional;
 
 public abstract class Patient extends TestEntity {
@@ -70,6 +70,15 @@ public abstract class Patient extends TestEntity {
             return patientAddSOReturn;
 
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
+            throw new TestEntityException(e.getMessage(), e);
+        }
+    }
+
+    public void cleanFormData() throws TestEntityException {
+        try {
+            new FormDataCleanService(this.id, testContext.getRestCallContext()).call();
+        } catch (RestServiceHttpException | RestServiceConnectionException e) {
+            System.out.println("ERROR >>> " + e.getMessage());
             throw new TestEntityException(e.getMessage(), e);
         }
     }
