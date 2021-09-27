@@ -10,6 +10,7 @@ import org.mentalizr.client.restService.patient.FormDataSaveService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
 import org.mentalizr.serviceObjects.frontend.patient.formData.FormDataSO;
+import org.mentalizr.serviceObjects.frontend.patient.formData.FormDataSOs;
 import org.mentalizr.serviceObjects.frontend.patient.formData.FormElementDataSO;
 
 import java.util.ArrayList;
@@ -175,26 +176,26 @@ public class T02_ProgramGenericScope {
         assertFalse(formDataSOReturn.isEditable());
         assertEquals(3, formDataSOReturn.getFormElementDataList().size());
 
-        List<String> formElementDataIdList = formDataSOReturn.getFormElementDataIds();
+        List<String> formElementDataIdList = FormDataSOs.getFormElementDataIds(formDataSOReturn);
         assertTrue(formElementDataIdList.contains("id1"));
         assertTrue(formElementDataIdList.contains("id2"));
         assertTrue(formElementDataIdList.contains("id3"));
 
-        Optional<FormElementDataSO> formElementDataSOOptional = formDataSOReturn.getFormElementDataById("id1");
+        Optional<FormElementDataSO> formElementDataSOOptional = FormDataSOs.getFormElementDataById(formDataSOReturn, "id1");
         assertTrue(formElementDataSOOptional.isPresent());
         formElementDataSOReturn = formElementDataSOOptional.get();
         assertEquals("id1", formElementDataSOReturn.getFormElementId());
         assertEquals("input", formElementDataSOReturn.getFormElementType());
         assertEquals("some dummy text", formElementDataSOReturn.getFormElementValue());
 
-        formElementDataSOOptional = formDataSOReturn.getFormElementDataById("id2");
+        formElementDataSOOptional = FormDataSOs.getFormElementDataById(formDataSOReturn, "id2");
         assertTrue(formElementDataSOOptional.isPresent());
         formElementDataSOReturn = formElementDataSOOptional.get();
         assertEquals("id2", formElementDataSOReturn.getFormElementId());
         assertEquals("input", formElementDataSOReturn.getFormElementType());
         assertEquals("some other dummy text as update", formElementDataSOReturn.getFormElementValue());
 
-        formElementDataSOOptional = formDataSOReturn.getFormElementDataById("id3");
+        formElementDataSOOptional = FormDataSOs.getFormElementDataById(formDataSOReturn, "id3");
         assertTrue(formElementDataSOOptional.isPresent());
         formElementDataSOReturn = formElementDataSOOptional.get();
         assertEquals("id3", formElementDataSOReturn.getFormElementId());
