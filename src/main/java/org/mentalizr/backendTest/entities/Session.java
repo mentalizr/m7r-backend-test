@@ -26,6 +26,14 @@ public class Session {
         }
     }
 
+    public void loginAsPatient(Patient patient) throws TestEntityException {
+        loginAsUser(patient.getUsername(), patient.getPassword());
+    }
+
+    public void loginAsTherapist(Therapist therapist) throws TestEntityException {
+        loginAsUser(therapist.getUsername(), therapist.getPassword());
+    }
+
     public void loginAsUser(String user, String password) throws TestEntityException {
         try {
             new LoginService(
