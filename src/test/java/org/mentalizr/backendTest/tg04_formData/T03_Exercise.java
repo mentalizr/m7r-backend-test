@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.backendTest.commons.Dates;
 import org.mentalizr.backendTest.entities.*;
 import org.mentalizr.client.restService.patient.FormDataGetService;
 import org.mentalizr.client.restService.patient.FormDataSaveService;
@@ -12,13 +13,13 @@ import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionExc
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
 import org.mentalizr.serviceObjects.frontend.patient.formData.ExerciseSO;
 import org.mentalizr.serviceObjects.frontend.patient.formData.FormDataSO;
+import org.mentalizr.serviceObjects.frontend.patient.formData.FormDataSOs;
 import org.mentalizr.serviceObjects.frontend.patient.formData.FormElementDataSO;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class T03_Exercise {
 
@@ -59,7 +60,7 @@ public class T03_Exercise {
         session.logout();
         session.loginAsAdmin();
 
-//        patient.cleanFormData();
+        patient.cleanFormData();
         patient.delete();
         therapist.delete();
         program.delete();
@@ -74,7 +75,7 @@ public class T03_Exercise {
 
         String contentId = "test_m1_sm1_someExercisePage";
 
-        // create form data initially ...
+        // create exercise initially ...
 
         FormDataSO formDataSO = new FormDataSO();
         formDataSO.setUserId(patient.getId());
@@ -83,7 +84,7 @@ public class T03_Exercise {
 
         ExerciseSO exerciseSO = new ExerciseSO();
         exerciseSO.setSent(false);
-        exerciseSO.setLastModifiedTimestamp("2021-09-27T10:47:01.443866Z");
+        exerciseSO.setLastModifiedTimestamp("");
         exerciseSO.setSeenByTherapist(false);
         exerciseSO.setSeenByTherapistTimestamp("");
         formDataSO.setExerciseSO(exerciseSO);
@@ -112,68 +113,41 @@ public class T03_Exercise {
             throw new RuntimeException(e.getMessage(), e);
         }
 
-        // reload form data and check ...
+        // reload exercise and check ...
 
-//        FormDataSO formDataSOReturn;
-//        try {
-//            formDataSOReturn = new FormDataGetService(contentId, testContext.getRestCallContext()).call();
-//        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-//            System.out.println(e.getMessage());
-//            e.printStackTrace();
-//            throw new RuntimeException(e.getMessage(), e);
-//        }
-//
-//        assertEquals(contentId, formDataSOReturn.getContentId());
-//        assertEquals(patient.getId(), formDataSOReturn.getUserId());
-//        assertFalse(formDataSOReturn.isEditable());
-//        assertEquals(2, formDataSOReturn.getFormElementDataList().size());
-//
-//        FormElementDataSO formElementDataSOReturn = formDataSOReturn.getFormElementDataList().get(0);
-//        assertEquals("id1", formElementDataSOReturn.getFormElementId());
-//        assertEquals("input", formElementDataSOReturn.getFormElementType());
-//        assertEquals("some dummy text", formElementDataSOReturn.getFormElementValue());
-//
-//        formElementDataSOReturn = formDataSOReturn.getFormElementDataList().get(1);
-//        assertEquals("id2", formElementDataSOReturn.getFormElementId());
-//        assertEquals("input", formElementDataSOReturn.getFormElementType());
-//        assertEquals("", formElementDataSOReturn.getFormElementValue());
-//
-//        // add other element and save again ...
-//
-//        formDataSO.getFormElementDataList().get(1).setFormElementValue("some other dummy text");
-//
-//        try {
-//            new FormDataSaveService(formDataSO, testContext.getRestCallContext()).call();
-//        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-//            System.out.println(e.getMessage());
-//            e.printStackTrace();
-//            throw new RuntimeException(e.getMessage(), e);
-//        }
-//
-//        // reload and check again ...
-//
-//        try {
-//            formDataSOReturn = new FormDataGetService(contentId, testContext.getRestCallContext()).call();
-//        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-//            System.out.println(e.getMessage());
-//            e.printStackTrace();
-//            throw new RuntimeException(e.getMessage(), e);
-//        }
-//
-//        assertEquals(contentId, formDataSOReturn.getContentId());
-//        assertEquals(patient.getId(), formDataSOReturn.getUserId());
-//        assertFalse(formDataSOReturn.isEditable());
-//        assertEquals(2, formDataSOReturn.getFormElementDataList().size());
-//
-//        formElementDataSOReturn = formDataSOReturn.getFormElementDataList().get(0);
-//        assertEquals("id1", formElementDataSOReturn.getFormElementId());
-//        assertEquals("input", formElementDataSOReturn.getFormElementType());
-//        assertEquals("some dummy text", formElementDataSOReturn.getFormElementValue());
-//
-//        formElementDataSOReturn = formDataSOReturn.getFormElementDataList().get(1);
-//        assertEquals("id2", formElementDataSOReturn.getFormElementId());
-//        assertEquals("input", formElementDataSOReturn.getFormElementType());
-//        assertEquals("some other dummy text", formElementDataSOReturn.getFormElementValue());
+        FormDataSO formDataSOReturn;
+        try {
+            formDataSOReturn = new FormDataGetService(contentId, testContext.getRestCallContext()).call();
+        } catch (RestServiceHttpException | RestServiceConnectionException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
+        }
+
+        assertEquals(contentId, formDataSOReturn.getContentId());
+        assertEquals(patient.getId(), formDataSOReturn.getUserId());
+        assertFalse(formDataSOReturn.isEditable());
+
+        assertTrue(FormDataSOs.isExercise(formDataSOReturn));
+        ExerciseSO exerciseSOReturn = formDataSOReturn.getExerciseSO();
+        assertTrue(exerciseSOReturn.isSent());
+        String lastModifiedTimestamp = exerciseSOReturn.getLastModifiedTimestamp();
+        assertTrue(Dates.isNotOlderThanOneMinute(lastModifiedTimestamp));
+        assertFalse(exerciseSOReturn.isSeenByTherapist());
+        assertEquals("1970-01-01T00:00:00Z", exerciseSOReturn.getSeenByTherapistTimestamp());
+
+        assertEquals(2, formDataSOReturn.getFormElementDataList().size());
+
+        FormElementDataSO formElementDataSOReturn = formDataSOReturn.getFormElementDataList().get(0);
+        assertEquals("id1", formElementDataSOReturn.getFormElementId());
+        assertEquals("input", formElementDataSOReturn.getFormElementType());
+        assertEquals("some dummy text", formElementDataSOReturn.getFormElementValue());
+
+        formElementDataSOReturn = formDataSOReturn.getFormElementDataList().get(1);
+        assertEquals("id2", formElementDataSOReturn.getFormElementId());
+        assertEquals("input", formElementDataSOReturn.getFormElementType());
+        assertEquals("", formElementDataSOReturn.getFormElementValue());
+
     }
 
 }
