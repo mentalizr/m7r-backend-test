@@ -1,4 +1,5 @@
 rootProject.name = 'm7r-backend-test'
 
+includeBuild('../m7r-commons')
 includeBuild('../m7r-service-objects')
 includeBuild('../m7r-cli')

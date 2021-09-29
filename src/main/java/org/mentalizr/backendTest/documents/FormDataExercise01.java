@@ -1,7 +1,7 @@
 package org.mentalizr.backendTest.documents;
 
-import org.mentalizr.backendTest.commons.Dates;
 import org.mentalizr.backendTest.commons.TestContext;
+import org.mentalizr.commons.Dates;
 import org.mentalizr.serviceObjects.frontend.patient.formData.ExerciseSO;
 import org.mentalizr.serviceObjects.frontend.patient.formData.FeedbackSO;
 import org.mentalizr.serviceObjects.frontend.patient.formData.FormElementDataSO;
