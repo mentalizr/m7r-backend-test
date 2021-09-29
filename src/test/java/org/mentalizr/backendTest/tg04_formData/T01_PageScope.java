@@ -3,7 +3,7 @@ package org.mentalizr.backendTest.tg04_formData;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.backendTest.entities.*;
 import org.mentalizr.client.restService.patient.FormDataGetService;
 import org.mentalizr.client.restService.patient.FormDataSaveService;

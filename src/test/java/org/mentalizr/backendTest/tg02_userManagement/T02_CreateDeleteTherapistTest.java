@@ -2,7 +2,7 @@ package org.mentalizr.backendTest.tg02_userManagement;
 
 import de.arthurpicht.utils.core.strings.Strings;
 import org.junit.jupiter.api.*;
-import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.backendTest.entities.*;
 import org.mentalizr.serviceObjects.userManagement.TherapistAddSO;
 import org.mentalizr.serviceObjects.userManagement.TherapistRestoreSO;

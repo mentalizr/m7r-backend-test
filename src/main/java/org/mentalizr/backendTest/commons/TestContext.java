@@ -1,4 +1,4 @@
-package org.mentalizr.backendTest;
+package org.mentalizr.backendTest.commons;
 
 import org.mentalizr.cli.config.CliConfiguration;
 import org.mentalizr.cli.config.CliConfigurationLoader;

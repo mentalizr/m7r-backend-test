@@ -1,7 +1,7 @@
 package org.mentalizr.backendTest.tg02_userManagement;
 
 import org.junit.jupiter.api.*;
-import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.backendTest.entities.*;
 
 import static org.junit.jupiter.api.Assertions.*;

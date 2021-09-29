@@ -1,6 +1,6 @@
 package org.mentalizr.backendTest.entities;
 
-import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.client.restService.userAdmin.ProgramAddService;
 import org.mentalizr.client.restService.userAdmin.ProgramDeleteService;
 import org.mentalizr.client.restService.userAdmin.ProgramGetAllService;

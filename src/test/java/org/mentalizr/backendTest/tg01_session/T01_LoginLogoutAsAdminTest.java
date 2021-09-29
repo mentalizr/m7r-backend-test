@@ -2,7 +2,7 @@ package org.mentalizr.backendTest.tg01_session;
 
 import de.arthurpicht.utils.core.strings.Strings;
 import org.junit.jupiter.api.*;
-import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.client.restService.sessionManagement.LoginService;
 import org.mentalizr.client.restService.sessionManagement.LogoutService;
 import org.mentalizr.client.restService.sessionManagement.SessionStatusService;

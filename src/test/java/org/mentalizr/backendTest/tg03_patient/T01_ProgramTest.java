@@ -3,7 +3,7 @@ package org.mentalizr.backendTest.tg03_patient;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.backendTest.entities.*;
 import org.mentalizr.client.restService.patient.ProgramService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;

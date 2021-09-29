@@ -16,4 +16,9 @@ public class Dates {
         return duration.toMinutes() < minutes;
     }
 
+    public static String epochAsISO() {
+        return "1970-01-01T00:00:00Z";
+    }
+
+
 }

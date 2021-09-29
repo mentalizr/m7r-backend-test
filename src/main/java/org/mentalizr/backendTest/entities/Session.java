@@ -1,6 +1,6 @@
 package org.mentalizr.backendTest.entities;
 
-import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.client.restService.sessionManagement.LoginService;
 import org.mentalizr.client.restService.sessionManagement.LogoutService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;

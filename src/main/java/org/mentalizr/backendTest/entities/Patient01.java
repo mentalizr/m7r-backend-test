@@ -1,6 +1,6 @@
 package org.mentalizr.backendTest.entities;
 
-import org.mentalizr.backendTest.TestContext;
+import org.mentalizr.backendTest.commons.TestContext;
 
 public class Patient01 extends Patient {
 
