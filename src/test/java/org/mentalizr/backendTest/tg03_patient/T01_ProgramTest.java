@@ -103,10 +103,12 @@ public class T01_ProgramTest {
                     "                    \"name\": \"page scope\",\n" +
                     "                    \"steps\": [\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m1_sm1_s1\",\n" +
                     "                            \"name\": \"Schritt 1\"\n" +
                     "                        },\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m1_sm1_s2\",\n" +
                     "                            \"name\": \"Schritt 2\"\n" +
                     "                        }\n" +
@@ -117,14 +119,17 @@ public class T01_ProgramTest {
                     "                    \"name\": \"generic program scope\",\n" +
                     "                    \"steps\": [\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m1_sm2_s1\",\n" +
                     "                            \"name\": \"Schritt 1\"\n" +
                     "                        },\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m1_sm2_s2\",\n" +
                     "                            \"name\": \"Schritt 2\"\n" +
                     "                        },\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m1_sm2_s3\",\n" +
                     "                            \"name\": \"Schritt 3\"\n" +
                     "                        }\n" +
@@ -135,14 +140,17 @@ public class T01_ProgramTest {
                     "                    \"name\": \"program scope\",\n" +
                     "                    \"steps\": [\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m1_sm3_s1\",\n" +
                     "                            \"name\": \"Schritt 1\"\n" +
                     "                        },\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m1_sm3_s2\",\n" +
                     "                            \"name\": \"Schritt 2\"\n" +
                     "                        },\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m1_sm3_s3\",\n" +
                     "                            \"name\": \"Schritt 3\"\n" +
                     "                        }\n" +
@@ -153,14 +161,17 @@ public class T01_ProgramTest {
                     "                    \"name\": \"program scope inc\",\n" +
                     "                    \"steps\": [\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m1_sm4_s1\",\n" +
                     "                            \"name\": \"Schritt 1\"\n" +
                     "                        },\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m1_sm4_s2\",\n" +
                     "                            \"name\": \"Schritt 2\"\n" +
                     "                        },\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m1_sm4_s3\",\n" +
                     "                            \"name\": \"Schritt 3\"\n" +
                     "                        }\n" +
@@ -177,8 +188,14 @@ public class T01_ProgramTest {
                     "                    \"name\": \"Erstes Submodul\",\n" +
                     "                    \"steps\": [\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m2_sm1_s1\",\n" +
                     "                            \"name\": \"Schritt 1\"\n" +
+                    "                        },\n" +
+                    "                        {\n" +
+                    "                            \"feedback\": true,\n" +
+                    "                            \"id\": \"test_m2_sm1_s2\",\n" +
+                    "                            \"name\": \"Schritt 2\"\n" +
                     "                        }\n" +
                     "                    ]\n" +
                     "                },\n" +
@@ -187,6 +204,7 @@ public class T01_ProgramTest {
                     "                    \"name\": \"Zweites Submodul\",\n" +
                     "                    \"steps\": [\n" +
                     "                        {\n" +
+                    "                            \"feedback\": false,\n" +
                     "                            \"id\": \"test_m2_sm2_s1\",\n" +
                     "                            \"name\": \"Schritt 1\"\n" +
                     "                        }\n" +
