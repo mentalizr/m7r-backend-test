@@ -1,7 +1,7 @@
 package org.mentalizr.backendTest.entities;
 
 import org.mentalizr.backendTest.commons.TestContext;
-import org.mentalizr.client.restService.test.FormDataCleanService;
+import org.mentalizr.client.restService.admin.FormDataCleanService;
 import org.mentalizr.client.restService.userAdmin.*;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
