@@ -95,7 +95,7 @@ public class T02_Restore {
             throw new RuntimeException(e.getMessage(), e);
         }
 
-        System.out.println(FormDataSOX.toJsonWithFormatting(formDataSOReturn));
+        System.out.println("Restored FormDataSO:\n" + FormDataSOX.toJsonWithFormatting(formDataSOReturn));
 
         assertNotNull(formDataSOReturn);
 
@@ -104,7 +104,5 @@ public class T02_Restore {
 
         assertEquals(formDataSOJson, formDataSOJsonReturn);
     }
-
-
 
 }
