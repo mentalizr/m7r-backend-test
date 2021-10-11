@@ -4,11 +4,13 @@ import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.backendTest.documents.FormData;
 import org.mentalizr.backendTest.documents.FormDataExercise01;
+import org.mentalizr.backendTest.documents.FormDataSimple01;
 import org.mentalizr.backendTest.entities.*;
 import org.mentalizr.client.restService.admin.FormDataGetAllService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
 import org.mentalizr.serviceObjects.backup.FormDataCollectionSO;
+import org.mentalizr.serviceObjects.backup.FormDataCollectionSOX;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,6 +24,7 @@ public class T01_GetAll {
     private static Therapist therapist;
     private static Patient patient;
     private static FormData formData;
+    private static FormData formData2;
 
     @BeforeAll
     public static void setup() throws TestEntityException {
@@ -46,6 +49,9 @@ public class T01_GetAll {
 
         formData = new FormDataExercise01(testContext);
         formData.send(patient);
+
+        formData2 = new FormDataSimple01(testContext);
+        formData2.save(patient);
 
         session.logout();
         session.loginAsAdmin();
@@ -80,7 +86,9 @@ public class T01_GetAll {
             throw new RuntimeException(e.getMessage(), e);
         }
 
-        assertEquals(1, formDataCollectionSO.getCollection().size());
+        System.out.println(FormDataCollectionSOX.toJsonWithFormatting(formDataCollectionSO));
+
+        assertEquals(2, formDataCollectionSO.getCollection().size());
     }
 
 //    @Test
