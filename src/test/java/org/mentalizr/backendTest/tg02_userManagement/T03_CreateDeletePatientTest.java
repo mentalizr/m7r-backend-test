@@ -60,7 +60,7 @@ public class T03_CreateDeletePatientTest {
             assertEquals(patient.getLastname(), patientAddSOReturn.getLastname());
             assertEquals(patient.getGender(), patientAddSOReturn.getGender());
             assertEquals(patient.getEmail(), patientAddSOReturn.getEmail());
-            assertTrue(Strings.isSpecified(patientAddSOReturn.getUuid()));
+            assertTrue(Strings.isSpecified(patientAddSOReturn.getUserId()));
             assertEquals(patient.getPassword(), patientAddSOReturn.getPassword());
             assertTrue(Strings.isSpecified(patientAddSOReturn.getPasswordHash()));
             assertEquals(program.getProgramId(), patientAddSOReturn.getProgramId());
@@ -80,7 +80,7 @@ public class T03_CreateDeletePatientTest {
         try {
             PatientRestoreSO patientRestoreSO = patient.get();
 
-            assertEquals(patient.getId(), patientRestoreSO.getUuid());
+            assertEquals(patient.getId(), patientRestoreSO.getUserId());
             assertEquals(patient.isActive(), patientRestoreSO.isActive());
             assertEquals(patient.getUsername(), patientRestoreSO.getUsername());
             assertEquals(patient.getPasswordHash(), patientRestoreSO.getPasswordHash());
@@ -104,7 +104,7 @@ public class T03_CreateDeletePatientTest {
         try {
             PatientRestoreSO patientRestoreSO = patient.find();
 
-            assertEquals(patient.getId(), patientRestoreSO.getUuid());
+            assertEquals(patient.getId(), patientRestoreSO.getUserId());
             assertEquals(patient.isActive(), patientRestoreSO.isActive());
             assertEquals(patient.getUsername(), patientRestoreSO.getUsername());
             assertEquals(patient.getPasswordHash(), patientRestoreSO.getPasswordHash());

@@ -64,7 +64,7 @@ public abstract class Patient extends TestEntity {
             PatientAddSO patientAddSOReturn
                     = new PatientAddService(patientAddSO, this.testContext.getRestCallContext()).call();
 
-            this.id = patientAddSOReturn.getUuid();
+            this.id = patientAddSOReturn.getUserId();
             this.passwordHash = patientAddSOReturn.getPasswordHash();
 
             return patientAddSOReturn;

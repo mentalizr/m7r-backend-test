@@ -50,7 +50,7 @@ public class T02_CreateDeleteTherapistTest {
             assertEquals(therapist.getLastname(), therapistAddSOReturn.getLastname());
             assertEquals(therapist.getGender(), therapistAddSOReturn.getGender());
             assertEquals(therapist.getEmail(), therapistAddSOReturn.getEmail());
-            assertTrue(Strings.isSpecified(therapistAddSOReturn.getUuid()));
+            assertTrue(Strings.isSpecified(therapistAddSOReturn.getUserId()));
             assertEquals(therapist.getPassword(), therapistAddSOReturn.getPassword());
             assertTrue(Strings.isSpecified(therapistAddSOReturn.getPasswordHash()));
 
@@ -74,7 +74,7 @@ public class T02_CreateDeleteTherapistTest {
             assertEquals(therapist.getLastname(), therapistRestoreSO.getLastname());
             assertEquals(therapist.getGender(), therapistRestoreSO.getGender());
             assertEquals(therapist.getEmail(), therapistRestoreSO.getEmail());
-            assertEquals(therapist.getId(), therapistRestoreSO.getUuid());
+            assertEquals(therapist.getId(), therapistRestoreSO.getUserId());
             assertEquals(therapist.getPasswordHash(), therapistRestoreSO.getPasswordHash());
 
         } catch (TestEntityException e) {
@@ -97,7 +97,7 @@ public class T02_CreateDeleteTherapistTest {
             assertEquals(therapist.getLastname(), therapistRestoreSO.getLastname());
             assertEquals(therapist.getGender(), therapistRestoreSO.getGender());
             assertEquals(therapist.getEmail(), therapistRestoreSO.getEmail());
-            assertEquals(therapist.getId(), therapistRestoreSO.getUuid());
+            assertEquals(therapist.getId(), therapistRestoreSO.getUserId());
             assertEquals(therapist.getPasswordHash(), therapistRestoreSO.getPasswordHash());
 
         } catch (TestEntityException | TestEntityNotFoundException e) {

@@ -61,7 +61,7 @@ public abstract class Therapist extends TestEntity {
             TherapistAddSO therapistAddSOReturn
                     = new TherapistAddService(therapistAddSO, this.testContext.getRestCallContext()).call();
 
-            this.id = therapistAddSOReturn.getUuid();
+            this.id = therapistAddSOReturn.getUserId();
             this.passwordHash = therapistAddSOReturn.getPasswordHash();
 
             return therapistAddSOReturn;
