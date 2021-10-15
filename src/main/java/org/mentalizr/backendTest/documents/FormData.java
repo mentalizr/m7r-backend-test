@@ -53,14 +53,14 @@ public abstract class FormData extends TestEntity {
         formDataSO.setUserId(patient.getId());
         formDataSO.setContentId(getContentId());
         formDataSO.setEditable(true);
-        if (getExerciseSO() != null) formDataSO.setExerciseSO(getExerciseSO());
+        if (getExerciseSO() != null) formDataSO.setExercise(getExerciseSO());
         if (getFormElementDataSOList() != null) {
             formDataSO.setFormElementDataList(getFormElementDataSOList());
         } else {
             formDataSO.setFormElementDataList(new ArrayList<>());
         }
         if (getFeedbackSO() != null) {
-            formDataSO.setFeedbackSO(getFeedbackSO());
+            formDataSO.setFeedback(getFeedbackSO());
         }
         return formDataSO;
     }

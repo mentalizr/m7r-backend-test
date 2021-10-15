@@ -87,7 +87,7 @@ public class T04_Feedback {
         assertEquals(patient.getId(), formDataSO.getUserId());
 
         assertTrue(FormDataSOs.isExercise(formDataSO));
-        ExerciseSO exerciseSOReturn = formDataSO.getExerciseSO();
+        ExerciseSO exerciseSOReturn = formDataSO.getExercise();
         assertTrue(exerciseSOReturn.isSent());
 
         assertEquals(1, formDataSO.getFormElementDataList().size());
@@ -138,13 +138,13 @@ public class T04_Feedback {
         assertEquals(patient.getId(), formDataSO.getUserId());
 
         assertTrue(FormDataSOs.isExercise(formDataSO));
-        ExerciseSO exerciseSOReturn = formDataSO.getExerciseSO();
+        ExerciseSO exerciseSOReturn = formDataSO.getExercise();
         assertTrue(exerciseSOReturn.isSent());
 
         assertEquals(1, formDataSO.getFormElementDataList().size());
 
         assertTrue(FormDataSOs.hasFeedback(formDataSO));
-        FeedbackSO feedbackSO = formDataSO.getFeedbackSO();
+        FeedbackSO feedbackSO = formDataSO.getFeedback();
         assertEquals("Some feedback text.", feedbackSO.getText());
         assertTrue(Dates.isNotOlderThanOneMinute(feedbackSO.getCreatedTimestamp()));
         assertFalse(feedbackSO.isSeenByPatient());

@@ -86,7 +86,7 @@ public class T03_Exercise {
         exerciseSO.setLastModifiedTimestamp("");
         exerciseSO.setSeenByTherapist(false);
         exerciseSO.setSeenByTherapistTimestamp("");
-        formDataSO.setExerciseSO(exerciseSO);
+        formDataSO.setExercise(exerciseSO);
 
         List<FormElementDataSO> formElementDataSOList = new ArrayList<>();
 
@@ -128,7 +128,7 @@ public class T03_Exercise {
         assertFalse(formDataSOReturn.isEditable());
 
         assertTrue(FormDataSOs.isExercise(formDataSOReturn));
-        ExerciseSO exerciseSOReturn = formDataSOReturn.getExerciseSO();
+        ExerciseSO exerciseSOReturn = formDataSOReturn.getExercise();
         assertTrue(exerciseSOReturn.isSent());
         String lastModifiedTimestamp = exerciseSOReturn.getLastModifiedTimestamp();
         assertTrue(Dates.isNotOlderThanOneMinute(lastModifiedTimestamp));
