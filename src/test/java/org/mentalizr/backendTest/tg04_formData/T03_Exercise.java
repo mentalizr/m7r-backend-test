@@ -79,7 +79,6 @@ public class T03_Exercise {
         FormDataSO formDataSO = new FormDataSO();
         formDataSO.setUserId(patient.getId());
         formDataSO.setContentId(contentId);
-        formDataSO.setEditable(false);
 
         ExerciseSO exerciseSO = new ExerciseSO();
         exerciseSO.setSent(false);
@@ -125,7 +124,6 @@ public class T03_Exercise {
 
         assertEquals(contentId, formDataSOReturn.getContentId());
         assertEquals(patient.getId(), formDataSOReturn.getUserId());
-        assertFalse(formDataSOReturn.isEditable());
 
         assertTrue(FormDataSOs.isExercise(formDataSOReturn));
         ExerciseSO exerciseSOReturn = formDataSOReturn.getExercise();

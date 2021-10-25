@@ -76,7 +76,6 @@ public class T01_PageScope {
         FormDataSO formDataSO = new FormDataSO();
         formDataSO.setUserId(patient.getId());
         formDataSO.setContentId(contentId);
-        formDataSO.setEditable(false);
 
         List<FormElementDataSO> formElementDataSOList = new ArrayList<>();
 
@@ -115,7 +114,6 @@ public class T01_PageScope {
 
         assertEquals(contentId, formDataSOReturn.getContentId());
         assertEquals(patient.getId(), formDataSOReturn.getUserId());
-        assertFalse(formDataSOReturn.isEditable());
         assertEquals(2, formDataSOReturn.getFormElementDataList().size());
 
         FormElementDataSO formElementDataSOReturn = formDataSOReturn.getFormElementDataList().get(0);
@@ -152,7 +150,6 @@ public class T01_PageScope {
 
         assertEquals(contentId, formDataSOReturn.getContentId());
         assertEquals(patient.getId(), formDataSOReturn.getUserId());
-        assertFalse(formDataSOReturn.isEditable());
         assertEquals(2, formDataSOReturn.getFormElementDataList().size());
 
         formElementDataSOReturn = formDataSOReturn.getFormElementDataList().get(0);

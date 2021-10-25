@@ -78,7 +78,6 @@ public class T02_ProgramGenericScope {
         FormDataSO formDataSO = new FormDataSO();
         formDataSO.setUserId(patient.getId());
         formDataSO.setContentId(contentId);
-        formDataSO.setEditable(false);
 
         List<FormElementDataSO> formElementDataSOList = new ArrayList<>();
 
@@ -117,7 +116,6 @@ public class T02_ProgramGenericScope {
 
         assertEquals(contentId, formDataSOReturn.getContentId());
         assertEquals(patient.getId(), formDataSOReturn.getUserId());
-        assertFalse(formDataSOReturn.isEditable());
         assertEquals(2, formDataSOReturn.getFormElementDataList().size());
 
         FormElementDataSO formElementDataSOReturn = formDataSOReturn.getFormElementDataList().get(0);
@@ -135,7 +133,6 @@ public class T02_ProgramGenericScope {
         formDataSO = new FormDataSO();
         formDataSO.setUserId(patient.getId());
         formDataSO.setContentId(contentId);
-        formDataSO.setEditable(false);
 
         formElementDataSOList = new ArrayList<>();
 
@@ -173,7 +170,6 @@ public class T02_ProgramGenericScope {
 
         assertEquals(contentId, formDataSOReturn.getContentId());
         assertEquals(patient.getId(), formDataSOReturn.getUserId());
-        assertFalse(formDataSOReturn.isEditable());
         assertEquals(3, formDataSOReturn.getFormElementDataList().size());
 
         List<String> formElementDataIdList = FormDataSOs.getFormElementDataIds(formDataSOReturn);

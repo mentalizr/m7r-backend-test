@@ -52,7 +52,6 @@ public abstract class FormData extends TestEntity {
         FormDataSO formDataSO = new FormDataSO();
         formDataSO.setUserId(patient.getId());
         formDataSO.setContentId(getContentId());
-        formDataSO.setEditable(true);
         if (getExerciseSO() != null) formDataSO.setExercise(getExerciseSO());
         if (getFormElementDataSOList() != null) {
             formDataSO.setFormElementDataList(getFormElementDataSOList());
