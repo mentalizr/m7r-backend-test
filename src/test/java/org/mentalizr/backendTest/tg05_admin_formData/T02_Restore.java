@@ -4,21 +4,16 @@ import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.backendTest.documents.FormData;
 import org.mentalizr.backendTest.documents.FormDataExercise01;
-import org.mentalizr.backendTest.documents.FormDataSimple01;
 import org.mentalizr.backendTest.entities.*;
-import org.mentalizr.client.restService.admin.FormDataGetAllService;
-import org.mentalizr.client.restService.admin.FormDataRestoreService;
+import org.mentalizr.client.restService.admin.formData.FormDataRestoreService;
 import org.mentalizr.client.restService.patient.FormDataGetService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
-import org.mentalizr.serviceObjects.backup.FormDataCollectionSO;
-import org.mentalizr.serviceObjects.backup.FormDataCollectionSOX;
 import org.mentalizr.serviceObjects.frontend.patient.formData.FormDataSO;
 import org.mentalizr.serviceObjects.frontend.patient.formData.FormDataSOX;
 
-import java.text.Normalizer;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T02_Restore {

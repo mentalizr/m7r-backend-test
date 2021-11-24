@@ -137,8 +137,9 @@ public class T03_CreateDeletePatientTest {
     void assertPatientDeleted() {
         System.out.println("\n>>> assert patient is deleted >>>");
 
-        Exception exception = assertThrows(TestEntityException.class, () -> patient.get());
-        assertEquals("Patient [" + patient.getUsername() + "] not found.", exception.getMessage());
+        TestEntityException exception = assertThrows(TestEntityException.class, () -> patient.get());
+        assertTrue(exception.hasStatusCode());
+        assertEquals(470, exception.getStatusCode());
     }
 
 }

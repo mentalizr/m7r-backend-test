@@ -1,11 +1,18 @@
 package org.mentalizr.backendTest.entities;
 
 import org.mentalizr.backendTest.commons.TestContext;
-import org.mentalizr.client.restService.admin.FormDataCleanService;
-import org.mentalizr.client.restService.userAdmin.*;
+import org.mentalizr.client.restService.admin.formData.FormDataCleanService;
+import org.mentalizr.client.restService.admin.patientStatus.PatientStatusDeleteService;
+import org.mentalizr.client.restService.patient.ProgramContentService;
+import org.mentalizr.client.restService.userAdmin.PatientAddService;
+import org.mentalizr.client.restService.userAdmin.PatientDeleteService;
+import org.mentalizr.client.restService.userAdmin.PatientGetAllService;
+import org.mentalizr.client.restService.userAdmin.PatientGetService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
-import org.mentalizr.serviceObjects.userManagement.*;
+import org.mentalizr.serviceObjects.userManagement.PatientAddSO;
+import org.mentalizr.serviceObjects.userManagement.PatientRestoreCollectionSO;
+import org.mentalizr.serviceObjects.userManagement.PatientRestoreSO;
 
 import java.util.Optional;
 
@@ -77,6 +84,15 @@ public abstract class Patient extends TestEntity {
     public void cleanFormData() throws TestEntityException {
         try {
             new FormDataCleanService(this.id, testContext.getRestCallContext()).call();
+        } catch (RestServiceHttpException | RestServiceConnectionException e) {
+            System.out.println("ERROR >>> " + e.getMessage());
+            throw new TestEntityException(e.getMessage(), e);
+        }
+    }
+
+    public void deletePatientStatus() throws TestEntityException {
+        try {
+            new PatientStatusDeleteService(this.id, testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             System.out.println("ERROR >>> " + e.getMessage());
             throw new TestEntityException(e.getMessage(), e);

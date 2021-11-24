@@ -6,7 +6,7 @@ import org.mentalizr.backendTest.documents.FormData;
 import org.mentalizr.backendTest.documents.FormDataExercise01;
 import org.mentalizr.backendTest.documents.FormDataSimple01;
 import org.mentalizr.backendTest.entities.*;
-import org.mentalizr.client.restService.admin.FormDataGetAllService;
+import org.mentalizr.client.restService.admin.formData.FormDataGetAllService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
 import org.mentalizr.serviceObjects.backup.FormDataCollectionSO;

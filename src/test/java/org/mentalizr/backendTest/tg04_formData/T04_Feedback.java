@@ -147,7 +147,7 @@ public class T04_Feedback {
         FeedbackSO feedbackSO = formDataSO.getFeedback();
         assertEquals("Some feedback text.", feedbackSO.getText());
         assertTrue(Dates.isNotOlderThanOneMinute(feedbackSO.getCreatedTimestamp()));
-        assertFalse(feedbackSO.isSeenByPatient());
+        assertTrue(feedbackSO.isSeenByPatient());
     }
 
 }
