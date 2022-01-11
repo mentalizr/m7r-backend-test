@@ -4,13 +4,10 @@ import de.arthurpicht.utils.core.strings.Strings;
 import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.backendTest.entities.*;
-import org.mentalizr.client.restService.patient.ApplicationConfigService;
 import org.mentalizr.client.restService.patient.PatientStatusService;
 import org.mentalizr.client.restService.patient.ProgramContentService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
-import org.mentalizr.serviceObjects.frontend.patient.ApplicationConfigPatientSO;
-import org.mentalizr.serviceObjects.frontend.patient.ApplicationConfigPatientSOX;
 import org.mentalizr.serviceObjects.frontend.patient.PatientStatusSO;
 
 import static org.junit.jupiter.api.Assertions.*;
