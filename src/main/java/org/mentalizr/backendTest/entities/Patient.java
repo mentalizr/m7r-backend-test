@@ -27,6 +27,8 @@ public abstract class Patient extends TestEntity {
 
     public abstract boolean isActive();
 
+    public abstract Long getPolicyConsent();
+
     public abstract String getUsername();
 
     public abstract String getFirstname();
@@ -38,6 +40,16 @@ public abstract class Patient extends TestEntity {
     public abstract String getEmail();
 
     public abstract String getPassword();
+
+    public abstract boolean isSecondFA();
+
+    public abstract Long getEmailConfirmation();
+
+    public abstract String getEmailConfToken();
+
+    public abstract String getEmailConfCode();
+
+    public abstract boolean isRenewPasswordRequired();
 
     public abstract boolean isBlocking();
 

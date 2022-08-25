@@ -14,6 +14,11 @@ public class Patient01 extends Patient {
     }
 
     @Override
+    public Long getPolicyConsent() {
+        return 0L;
+    }
+
+    @Override
     public String getUsername() {
         return "autotest_patient_01";
     }
@@ -41,6 +46,31 @@ public class Patient01 extends Patient {
     @Override
     public String getPassword() {
         return "topsecret";
+    }
+
+    @Override
+    public boolean isSecondFA() {
+        return false;
+    }
+
+    @Override
+    public Long getEmailConfirmation() {
+        return 0L;
+    }
+
+    @Override
+    public String getEmailConfToken() {
+        return null;
+    }
+
+    @Override
+    public String getEmailConfCode() {
+        return null;
+    }
+
+    @Override
+    public boolean isRenewPasswordRequired() {
+        return false;
     }
 
     @Override

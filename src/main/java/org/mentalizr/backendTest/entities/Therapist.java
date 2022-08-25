@@ -19,6 +19,8 @@ public abstract class Therapist extends TestEntity {
 
     public abstract boolean isActive();
 
+    public abstract Long getPolicyConsent();
+
     public abstract String getUsername();
 
     public abstract String getTitle();
@@ -32,6 +34,16 @@ public abstract class Therapist extends TestEntity {
     public abstract String getEmail();
 
     public abstract String getPassword();
+
+    public abstract boolean isSecondFA();
+
+    public abstract Long getEmailConfirmation();
+
+    public abstract String getEmailConfToken();
+
+    public abstract String getEmailConfCode();
+
+    public abstract boolean isRenewPasswordRequired();
 
     public String getPasswordHash() {
         return this.passwordHash;

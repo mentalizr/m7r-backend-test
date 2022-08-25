@@ -10,6 +10,7 @@ import org.mentalizr.client.restService.sessionManagement.SessionStatusService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
 import org.mentalizr.serviceObjects.SessionStatusSO;
+import org.mentalizr.serviceObjects.SessionStatusSOs;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -74,7 +75,7 @@ public class T02_LoginLogoutAsPatientTest {
         System.out.println("\n>>> session status >>>");
         try {
             SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
-            assertTrue(sessionStatusSO.isValid());
+            assertTrue(SessionStatusSOs.isValid(sessionStatusSO));
             assertEquals("PATIENT", sessionStatusSO.getUserRole());
             assertTrue(Strings.isSpecified(sessionStatusSO.getSessionId()));
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
@@ -99,7 +100,7 @@ public class T02_LoginLogoutAsPatientTest {
         System.out.println("\n>>> status after Logout >>>");
         try {
             SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
-            assertFalse(sessionStatusSO.isValid());
+            assertFalse(SessionStatusSOs.isValid(sessionStatusSO));
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             System.out.println("ERROR >>> " + e.getMessage());
             fail(e);
