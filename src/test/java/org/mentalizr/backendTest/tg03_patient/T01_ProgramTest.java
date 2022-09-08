@@ -14,6 +14,7 @@ import org.mentalizr.serviceObjects.frontend.program.ProgramSOX;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@SuppressWarnings("NewClassNamingConvention")
 public class T01_ProgramTest {
 
     private static TestContext testContext;
@@ -38,12 +39,12 @@ public class T01_ProgramTest {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient = new Patient01(testContext);
-        patient.create(therapist.getId(), program.getProgramId());
+        patient = new Patient01(program, therapist, testContext);
+        patient.create();
 
         session.logout();
 
-        session.loginAsUser(patient.getUsername(), patient.getPassword());
+        session.login(patient);
     }
 
     @AfterAll

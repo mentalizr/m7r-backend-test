@@ -13,6 +13,7 @@ import org.mentalizr.serviceObjects.SessionStatusSOs;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T01_LoginLogoutAsAdminTest {
 

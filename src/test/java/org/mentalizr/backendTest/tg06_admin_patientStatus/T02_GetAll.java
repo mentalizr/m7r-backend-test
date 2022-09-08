@@ -14,6 +14,7 @@ import org.mentalizr.serviceObjects.frontend.patient.PatientStatusSO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T02_GetAll {
 
@@ -43,19 +44,19 @@ public class T02_GetAll {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient1 = new Patient01(testContext);
-        patient1.create(therapist.getId(), program.getProgramId());
+        patient1 = new Patient01(program, therapist, testContext);
+        patient1.create();
 
-        patient2 = new Patient02(testContext);
-        patient2.create(therapist.getId(), program.getProgramId());
+        patient2 = new Patient02(program, therapist, testContext);
+        patient2.create();
 
         session.logout();
 
-        session.loginAsPatient(patient1);
+        session.login(patient1);
         new ProgramContentService(contentIdPatient1, testContext.getRestCallContext()).call();
         session.logout();
 
-        session.loginAsPatient(patient2);
+        session.login(patient2);
         new ProgramContentService(contentIdPatient2, testContext.getRestCallContext()).call();
         session.logout();
     }
@@ -96,10 +97,11 @@ public class T02_GetAll {
         System.out.println(PatientStatusCollectionSOX.toJson(patientStatusCollectionSO));
         assertTrue(patientStatusCollectionSO.getCollection().size() >= 2);
 
-        PatientStatusSO patientStatusSO = getPatientStatus(patient1.getId(), patientStatusCollectionSO);
+        PatientStatusSO patientStatusSO
+                = getPatientStatus(patient1.getUserId(), patientStatusCollectionSO);
         assertEquals(patientStatusSO.getLastContentId(), contentIdPatient1);
 
-        patientStatusSO = getPatientStatus(patient2.getId(), patientStatusCollectionSO);
+        patientStatusSO = getPatientStatus(patient2.getUserId(), patientStatusCollectionSO);
         assertEquals(patientStatusSO.getLastContentId(), contentIdPatient2);
     }
 

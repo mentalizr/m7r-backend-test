@@ -13,6 +13,7 @@ import org.mentalizr.serviceObjects.frontend.application.ApplicationConfigGeneri
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@SuppressWarnings("NewClassNamingConvention")
 public class T02_ApplicationConfigGenericTest {
 
     private static TestContext testContext;
@@ -35,7 +36,7 @@ public class T02_ApplicationConfigGenericTest {
             System.out.println(ApplicationConfigGenericSOX.toJsonWithFormatting(applicationConfigGenericSO));
 
             assertEquals("mentalizr", applicationConfigGenericSO.getTitle());
-            assertEquals("AK_LOGO_NetStep_4C.png", applicationConfigGenericSO.getLogo());
+            assertEquals("LOGO_mentalizr.png", applicationConfigGenericSO.getLogo());
 
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);

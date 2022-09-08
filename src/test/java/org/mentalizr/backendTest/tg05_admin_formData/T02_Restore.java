@@ -15,6 +15,7 @@ import org.mentalizr.serviceObjects.frontend.patient.formData.FormDataSOX;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T02_Restore {
 
@@ -40,8 +41,8 @@ public class T02_Restore {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient = new Patient01(testContext);
-        patient.create(therapist.getId(), program.getProgramId());
+        patient = new Patient01(program, therapist, testContext);
+        patient.create();
 
         session.logout();
         session.loginAsAdmin();
@@ -79,7 +80,7 @@ public class T02_Restore {
         }
 
         session.logout();
-        session.loginAsPatient(patient);
+        session.login(patient);
 
         FormDataSO formDataSOReturn;
         try {

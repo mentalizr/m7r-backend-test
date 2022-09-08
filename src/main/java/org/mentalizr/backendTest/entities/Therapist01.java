@@ -1,6 +1,7 @@
 package org.mentalizr.backendTest.entities;
 
 import org.mentalizr.backendTest.commons.TestContext;
+import org.mentalizr.serviceObjects.userManagement.TherapistAddSO;
 
 public class Therapist01 extends Therapist {
 
@@ -9,73 +10,21 @@ public class Therapist01 extends Therapist {
     }
 
     @Override
-    public boolean isActive() {
-        return true;
-    }
-
-    @Override
-    public Long getPolicyConsent() {
-        return 0L;
-    }
-
-    @Override
-    public String getUsername() {
-        return "autotest_therapist_01";
-    }
-
-    @Override
-    public String getTitle() {
-        return "Dr. med.";
-    }
-
-    @Override
-    public String getFirstname() {
-        return "therapist_01_firstname";
-    }
-
-    @Override
-    public String getLastname() {
-        return "therapist_02_lastname";
-    }
-
-    @Override
-    public int getGender() {
-        return 0;
-    }
-
-    @Override
-    public String getEmail() {
-        return "thera01@example.org";
-    }
-
-    @Override
-    public String getPassword() {
-        return "super_secret";
-    }
-
-    @Override
-    public boolean isSecondFA() {
-        return false;
-    }
-
-    @Override
-    public Long getEmailConfirmation() {
-        return 0L;
-    }
-
-    @Override
-    public String getEmailConfToken() {
-        return null;
-    }
-
-    @Override
-    public String getEmailConfCode() {
-        return null;
-    }
-
-    @Override
-    public boolean isRenewPasswordRequired() {
-        return false;
+    public TherapistAddSO getTherapistAddSO() {
+        TherapistAddSO therapistAddSO = new TherapistAddSO();
+        therapistAddSO.setActive(true);
+        therapistAddSO.setRequirePolicyConsent(false);
+        therapistAddSO.setUsername("autotest_therapist_01");
+        therapistAddSO.setPassword("super_secret");
+        therapistAddSO.setEmail("therapist01@example.org");
+        therapistAddSO.setTitle("Dr. med.");
+        therapistAddSO.setFirstname("therapist_01_firstname");
+        therapistAddSO.setLastname("therapist_01_lastname");
+        therapistAddSO.setGender(1);
+        therapistAddSO.setRequire2FA(false);
+        therapistAddSO.setRequireEmailConfirmation(false);
+        therapistAddSO.setRequireRenewPassword(false);
+        return therapistAddSO;
     }
 
 }

@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("NewClassNamingConvention")
 public class T01_PageScope {
 
     private static TestContext testContext;
@@ -41,8 +42,8 @@ public class T01_PageScope {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient = new Patient01(testContext);
-        patient.create(therapist.getId(), program.getProgramId());
+        patient = new Patient01(program, therapist, testContext);
+        patient.create();
 
         session.logout();
 
@@ -74,7 +75,7 @@ public class T01_PageScope {
         // create form data initially ...
 
         FormDataSO formDataSO = new FormDataSO();
-        formDataSO.setUserId(patient.getId());
+        formDataSO.setUserId(patient.getUserId());
         formDataSO.setContentId(contentId);
 
         List<FormElementDataSO> formElementDataSOList = new ArrayList<>();
@@ -113,7 +114,7 @@ public class T01_PageScope {
         }
 
         assertEquals(contentId, formDataSOReturn.getContentId());
-        assertEquals(patient.getId(), formDataSOReturn.getUserId());
+        assertEquals(patient.getUserId(), formDataSOReturn.getUserId());
         assertEquals(2, formDataSOReturn.getFormElementDataList().size());
 
         FormElementDataSO formElementDataSOReturn = formDataSOReturn.getFormElementDataList().get(0);
@@ -149,7 +150,7 @@ public class T01_PageScope {
         }
 
         assertEquals(contentId, formDataSOReturn.getContentId());
-        assertEquals(patient.getId(), formDataSOReturn.getUserId());
+        assertEquals(patient.getUserId(), formDataSOReturn.getUserId());
         assertEquals(2, formDataSOReturn.getFormElementDataList().size());
 
         formElementDataSOReturn = formDataSOReturn.getFormElementDataList().get(0);

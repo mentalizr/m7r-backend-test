@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("NewClassNamingConvention")
 public class T02_ProgramGenericScope {
 
     private static TestContext testContext;
@@ -43,8 +44,8 @@ public class T02_ProgramGenericScope {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient = new Patient01(testContext);
-        patient.create(therapist.getId(), program.getProgramId());
+        patient = new Patient01(program, therapist, testContext);
+        patient.create();
 
         session.logout();
 
@@ -76,7 +77,7 @@ public class T02_ProgramGenericScope {
         // create form data initially ...
 
         FormDataSO formDataSO = new FormDataSO();
-        formDataSO.setUserId(patient.getId());
+        formDataSO.setUserId(patient.getUserId());
         formDataSO.setContentId(contentId);
 
         List<FormElementDataSO> formElementDataSOList = new ArrayList<>();
@@ -115,7 +116,7 @@ public class T02_ProgramGenericScope {
         }
 
         assertEquals(contentId, formDataSOReturn.getContentId());
-        assertEquals(patient.getId(), formDataSOReturn.getUserId());
+        assertEquals(patient.getUserId(), formDataSOReturn.getUserId());
         assertEquals(2, formDataSOReturn.getFormElementDataList().size());
 
         FormElementDataSO formElementDataSOReturn = formDataSOReturn.getFormElementDataList().get(0);
@@ -131,7 +132,7 @@ public class T02_ProgramGenericScope {
         // update and add other element then save again ...
 
         formDataSO = new FormDataSO();
-        formDataSO.setUserId(patient.getId());
+        formDataSO.setUserId(patient.getUserId());
         formDataSO.setContentId(contentId);
 
         formElementDataSOList = new ArrayList<>();
@@ -169,7 +170,7 @@ public class T02_ProgramGenericScope {
         }
 
         assertEquals(contentId, formDataSOReturn.getContentId());
-        assertEquals(patient.getId(), formDataSOReturn.getUserId());
+        assertEquals(patient.getUserId(), formDataSOReturn.getUserId());
         assertEquals(3, formDataSOReturn.getFormElementDataList().size());
 
         List<String> formElementDataIdList = FormDataSOs.getFormElementDataIds(formDataSOReturn);

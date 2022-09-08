@@ -14,6 +14,7 @@ import org.mentalizr.serviceObjects.SessionStatusSOs;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T02_LoginLogoutAsPatientTest {
 
@@ -39,8 +40,8 @@ public class T02_LoginLogoutAsPatientTest {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient = new Patient01(testContext);
-        patient.create(therapist.getId(), program.getProgramId());
+        patient = new Patient01(program, therapist, testContext);
+        patient.create();
 
         session.logout();
     }
@@ -63,7 +64,11 @@ public class T02_LoginLogoutAsPatientTest {
     void login() {
         System.out.println("\n>>> login >>>");
         try {
-            new LoginService(patient.getUsername(), patient.getPassword(), testContext.getRestCallContext()).call();
+            new LoginService(
+                    patient.getPatientRestoreSO().getUsername(),
+                    patient.getPassword(),
+                    testContext.getRestCallContext()
+            ).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }

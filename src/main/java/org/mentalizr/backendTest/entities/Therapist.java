@@ -10,60 +10,30 @@ import java.util.Optional;
 
 public abstract class Therapist extends TestEntity {
 
-    protected String id;
-    protected String passwordHash;
+    protected TherapistRestoreSO therapistRestoreSO;
 
     public Therapist(TestContext testContext) {
         super(testContext);
     }
 
-    public abstract boolean isActive();
+    public abstract TherapistAddSO getTherapistAddSO();
 
-    public abstract Long getPolicyConsent();
-
-    public abstract String getUsername();
-
-    public abstract String getTitle();
-
-    public abstract String getFirstname();
-
-    public abstract String getLastname();
-
-    public abstract int getGender();
-
-    public abstract String getEmail();
-
-    public abstract String getPassword();
-
-    public abstract boolean isSecondFA();
-
-    public abstract Long getEmailConfirmation();
-
-    public abstract String getEmailConfToken();
-
-    public abstract String getEmailConfCode();
-
-    public abstract boolean isRenewPasswordRequired();
-
-    public String getPasswordHash() {
-        return this.passwordHash;
+    public String getUserId() {
+        if (this.therapistRestoreSO == null) throw new IllegalStateException("Therapist not created yet.");
+        return this.therapistRestoreSO.getUserId();
     }
 
-    public String getId() {
-        return this.id;
+    public String getUsername() {
+        return this.getTherapistAddSO().getUsername();
     }
 
-    public TherapistAddSO getTherapistAddSO() {
-        TherapistAddSO therapistAddSO = new TherapistAddSO();
-        therapistAddSO.setActive(isActive());
-        therapistAddSO.setUsername(getUsername());
-        therapistAddSO.setTitle(getTitle());
-        therapistAddSO.setFirstname(getFirstname());
-        therapistAddSO.setLastname(getLastname());
-        therapistAddSO.setGender(getGender());
-        therapistAddSO.setEmail(getEmail());
-        therapistAddSO.setPassword(getPassword());
-        return therapistAddSO;
+    public String getPassword() {
+        return this.getTherapistAddSO().getPassword();
+    }
+
+    public TherapistRestoreSO getTherapistRestoreSO() {
+        if (this.therapistRestoreSO == null) throw new IllegalStateException("Therapist not created yet.");
+        return this.therapistRestoreSO;
     }
 
     public TherapistAddSO create() throws TestEntityException {
@@ -72,12 +42,8 @@ public abstract class Therapist extends TestEntity {
         try {
             TherapistAddSO therapistAddSOReturn
                     = new TherapistAddService(therapistAddSO, this.testContext.getRestCallContext()).call();
-
-            this.id = therapistAddSOReturn.getUserId();
-            this.passwordHash = therapistAddSOReturn.getPasswordHash();
-
+            this.therapistRestoreSO = new TherapistGetService(therapistAddSO.getUsername(), this.testContext.getRestCallContext()).call();
             return therapistAddSOReturn;
-
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             throw new TestEntityException(e.getMessage(), e);
         }
@@ -85,7 +51,10 @@ public abstract class Therapist extends TestEntity {
 
     public void delete() throws TestEntityException {
         try {
-            new TherapistDeleteService(getUsername(), testContext.getRestCallContext()).call();
+            new TherapistDeleteService(
+                    this.therapistRestoreSO.getUsername(),
+                    testContext.getRestCallContext()
+            ).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             System.out.println("ERROR >>> " + e.getMessage());
             throw new TestEntityException(e.getMessage(), e);
@@ -94,7 +63,10 @@ public abstract class Therapist extends TestEntity {
 
     public TherapistRestoreSO get() throws TestEntityException {
         try {
-            return new TherapistGetService(getUsername(), testContext.getRestCallContext()).call();
+            return new TherapistGetService(
+                    this.therapistRestoreSO.getUsername(),
+                    testContext.getRestCallContext()
+            ).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             throw new TestEntityException(e.getMessage(), e);
         }
@@ -108,15 +80,16 @@ public abstract class Therapist extends TestEntity {
             throw new TestEntityException(e.getMessage(), e);
         }
 
+        String username = this.therapistRestoreSO.getUsername();
         Optional<TherapistRestoreSO> therapistRestoreSOOptional
                 = therapistRestoreCollectionSO
                 .getCollection()
                 .stream()
-                .filter(therapistRestoreSO -> therapistRestoreSO.getUsername().equals(getUsername()))
+                .filter(therapistRestoreSO -> therapistRestoreSO.getUsername().equals(username))
                 .findAny();
 
         if (therapistRestoreSOOptional.isEmpty())
-            throw new TestEntityNotFoundException("Therapist [" + getUsername() + "] not found.");
+            throw new TestEntityNotFoundException("Therapist [" + username + "] not found.");
 
         return therapistRestoreSOOptional.get();
     }

@@ -9,6 +9,7 @@ import org.mentalizr.serviceObjects.userManagement.TherapistRestoreSO;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T02_CreateDeleteTherapistTest {
 
@@ -43,16 +44,20 @@ public class T02_CreateDeleteTherapistTest {
         try {
             TherapistAddSO therapistAddSOReturn = therapist.create();
 
-            assertEquals(therapist.isActive(), therapistAddSOReturn.isActive());
-            assertEquals(therapist.getUsername(), therapistAddSOReturn.getUsername());
-            assertEquals(therapist.getTitle(), therapistAddSOReturn.getTitle());
-            assertEquals(therapist.getFirstname(), therapistAddSOReturn.getFirstname());
-            assertEquals(therapist.getLastname(), therapistAddSOReturn.getLastname());
-            assertEquals(therapist.getGender(), therapistAddSOReturn.getGender());
-            assertEquals(therapist.getEmail(), therapistAddSOReturn.getEmail());
             assertTrue(Strings.isSpecified(therapistAddSOReturn.getUserId()));
+            assertEquals(therapist.getTherapistAddSO().isActive(), therapistAddSOReturn.isActive());
+            assertEquals(therapist.getTherapistAddSO().isRequirePolicyConsent(), therapistAddSOReturn.isRequirePolicyConsent());
+            assertEquals(therapist.getTherapistAddSO().getUsername(), therapistAddSOReturn.getUsername());
             assertEquals(therapist.getPassword(), therapistAddSOReturn.getPassword());
             assertTrue(Strings.isSpecified(therapistAddSOReturn.getPasswordHash()));
+            assertEquals(therapist.getTherapistAddSO().getEmail(), therapistAddSOReturn.getEmail());
+            assertEquals(therapist.getTherapistAddSO().getTitle(), therapistAddSOReturn.getTitle());
+            assertEquals(therapist.getTherapistAddSO().getFirstname(), therapistAddSOReturn.getFirstname());
+            assertEquals(therapist.getTherapistAddSO().getLastname(), therapistAddSOReturn.getLastname());
+            assertEquals(therapist.getTherapistAddSO().getGender(), therapistAddSOReturn.getGender());
+            assertEquals(therapist.getTherapistAddSO().isRequire2FA(), therapistAddSOReturn.isRequire2FA());
+            assertEquals(therapist.getTherapistAddSO().isRequireEmailConfirmation(), therapistAddSOReturn.isRequireEmailConfirmation());
+            assertEquals(therapist.getTherapistAddSO().isRequireRenewPassword(), therapistAddSOReturn.isRequireRenewPassword());
 
         } catch (TestEntityException e) {
             fail(e);
@@ -66,17 +71,7 @@ public class T02_CreateDeleteTherapistTest {
 
         try {
             TherapistRestoreSO therapistRestoreSO = therapist.get();
-
-            assertEquals(therapist.isActive(), therapistRestoreSO.isActive());
-            assertEquals(therapist.getUsername(), therapistRestoreSO.getUsername());
-            assertEquals(therapist.getTitle(), therapistRestoreSO.getTitle());
-            assertEquals(therapist.getFirstname(), therapistRestoreSO.getFirstname());
-            assertEquals(therapist.getLastname(), therapistRestoreSO.getLastname());
-            assertEquals(therapist.getGender(), therapistRestoreSO.getGender());
-            assertEquals(therapist.getEmail(), therapistRestoreSO.getEmail());
-            assertEquals(therapist.getId(), therapistRestoreSO.getUserId());
-            assertEquals(therapist.getPasswordHash(), therapistRestoreSO.getPasswordHash());
-
+            assertEqualTherapistRestoreSO(therapist.getTherapistRestoreSO(), therapistRestoreSO);
         } catch (TestEntityException e) {
             fail(e);
         }
@@ -89,17 +84,7 @@ public class T02_CreateDeleteTherapistTest {
 
         try {
             TherapistRestoreSO therapistRestoreSO = therapist.find();
-
-            assertEquals(therapist.isActive(), therapistRestoreSO.isActive());
-            assertEquals(therapist.getUsername(), therapistRestoreSO.getUsername());
-            assertEquals(therapist.getTitle(), therapistRestoreSO.getTitle());
-            assertEquals(therapist.getFirstname(), therapistRestoreSO.getFirstname());
-            assertEquals(therapist.getLastname(), therapistRestoreSO.getLastname());
-            assertEquals(therapist.getGender(), therapistRestoreSO.getGender());
-            assertEquals(therapist.getEmail(), therapistRestoreSO.getEmail());
-            assertEquals(therapist.getId(), therapistRestoreSO.getUserId());
-            assertEquals(therapist.getPasswordHash(), therapistRestoreSO.getPasswordHash());
-
+            assertEqualTherapistRestoreSO(therapist.getTherapistRestoreSO(), therapistRestoreSO);
         } catch (TestEntityException | TestEntityNotFoundException e) {
             fail(e);
         }
@@ -124,6 +109,26 @@ public class T02_CreateDeleteTherapistTest {
 
         Exception exception = assertThrows(TestEntityNotFoundException.class, () -> therapist.find());
         assertEquals("Therapist [" + therapist.getUsername() + "] not found.", exception.getMessage());
+    }
+
+    private void assertEqualTherapistRestoreSO(TherapistRestoreSO expected, TherapistRestoreSO actual) {
+        assertEquals(expected.isActive(), actual.isActive());
+        assertEquals(expected.getFirstActive(), actual.getFirstActive());
+        assertEquals(expected.getLastActive(), actual.getLastActive());
+        assertEquals(expected.getPolicyConsent(), actual.getPolicyConsent());
+        assertEquals(expected.getUserId(), actual.getUserId());
+        assertEquals(expected.getUsername(), actual.getUsername());
+        assertEquals(expected.getPasswordHash(), actual.getPasswordHash());
+        assertEquals(expected.getEmail(), actual.getEmail());
+        assertEquals(expected.getTitle(), actual.getTitle());
+        assertEquals(expected.getFirstname(), actual.getFirstname());
+        assertEquals(expected.getLastname(), actual.getLastname());
+        assertEquals(expected.getGender(), actual.getGender());
+        assertEquals(expected.isSecondFA(), actual.isSecondFA());
+        assertEquals(expected.getEmailConfirmation(), actual.getEmailConfirmation());
+        assertEquals(expected.getEmailConfToken(), actual.getEmailConfToken());
+        assertEquals(expected.getEmailConfCode(), actual.getEmailConfCode());
+        assertEquals(expected.isRenewPasswordRequired(), actual.isRenewPasswordRequired());
     }
 
 }

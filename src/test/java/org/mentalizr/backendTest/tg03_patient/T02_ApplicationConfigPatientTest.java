@@ -15,6 +15,7 @@ import org.mentalizr.serviceObjects.frontend.patient.ApplicationConfigPatientSOX
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@SuppressWarnings("NewClassNamingConvention")
 public class T02_ApplicationConfigPatientTest {
 
     private static TestContext testContext;
@@ -39,8 +40,8 @@ public class T02_ApplicationConfigPatientTest {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient = new Patient01(testContext);
-        patient.create(therapist.getId(), program.getProgramId());
+        patient = new Patient01(program, therapist, testContext);
+        patient.create();
 
         session.logout();
 

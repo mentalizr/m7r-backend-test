@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("NewClassNamingConvention")
 public class T03_Exercise {
 
     private static TestContext testContext;
@@ -44,8 +45,8 @@ public class T03_Exercise {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient = new Patient01(testContext);
-        patient.create(therapist.getId(), program.getProgramId());
+        patient = new Patient01(program, therapist, testContext);
+        patient.create();
 
         session.logout();
 
@@ -77,7 +78,7 @@ public class T03_Exercise {
         // create exercise initially ...
 
         FormDataSO formDataSO = new FormDataSO();
-        formDataSO.setUserId(patient.getId());
+        formDataSO.setUserId(patient.getUserId());
         formDataSO.setContentId(contentId);
 
         ExerciseSO exerciseSO = new ExerciseSO();
@@ -123,7 +124,7 @@ public class T03_Exercise {
         }
 
         assertEquals(contentId, formDataSOReturn.getContentId());
-        assertEquals(patient.getId(), formDataSOReturn.getUserId());
+        assertEquals(patient.getUserId(), formDataSOReturn.getUserId());
 
         assertTrue(FormDataSOs.isExercise(formDataSOReturn));
         ExerciseSO exerciseSOReturn = formDataSOReturn.getExercise();

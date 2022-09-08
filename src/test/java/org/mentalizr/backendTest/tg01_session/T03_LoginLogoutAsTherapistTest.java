@@ -14,12 +14,12 @@ import org.mentalizr.serviceObjects.SessionStatusSOs;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T03_LoginLogoutAsTherapistTest {
 
     private static TestContext testContext;
     private static Session session;
-
     private static Therapist therapist;
 
     @BeforeAll
@@ -53,7 +53,11 @@ public class T03_LoginLogoutAsTherapistTest {
     void login() {
         System.out.println("\n>>> login >>>");
         try {
-            new LoginService(therapist.getUsername(), therapist.getPassword(), testContext.getRestCallContext()).call();
+            new LoginService(
+                    therapist.getUsername(),
+                    therapist.getPassword(),
+                    testContext.getRestCallContext()
+            ).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }

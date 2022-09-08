@@ -12,6 +12,7 @@ import org.mentalizr.serviceObjects.frontend.patient.PatientStatusSO;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T03_PatientStatusTest {
 
@@ -39,12 +40,12 @@ public class T03_PatientStatusTest {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient = new Patient01(testContext);
-        patient.create(therapist.getId(), program.getProgramId());
+        patient = new Patient01(program, therapist, testContext);
+        patient.create();
 
         session.logout();
 
-        session.loginAsUser(patient.getUsername(), patient.getPassword());
+        session.login(patient);
     }
 
     @AfterAll
