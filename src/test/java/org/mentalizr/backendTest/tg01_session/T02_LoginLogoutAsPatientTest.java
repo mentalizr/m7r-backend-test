@@ -81,7 +81,7 @@ public class T02_LoginLogoutAsPatientTest {
         try {
             SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
             assertTrue(SessionStatusSOs.isValid(sessionStatusSO));
-            assertEquals("PATIENT", sessionStatusSO.getUserRole());
+            assertEquals("LOGIN_PATIENT", sessionStatusSO.getUserRole());
             assertTrue(Strings.isSpecified(sessionStatusSO.getSessionId()));
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
