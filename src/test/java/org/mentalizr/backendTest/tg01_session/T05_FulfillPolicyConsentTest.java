@@ -80,7 +80,6 @@ public class T05_FulfillPolicyConsentTest {
     @Order(2)
     void consent() {
         System.out.println("\n>>> consent policy >>>");
-
         try {
             new ConsentPolicyService(testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {

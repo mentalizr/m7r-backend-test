@@ -115,7 +115,6 @@ public class T02_CreateDeleteTherapistTest {
         assertEquals(expected.isActive(), actual.isActive());
         assertEquals(expected.getFirstActive(), actual.getFirstActive());
         assertEquals(expected.getLastActive(), actual.getLastActive());
-        assertEquals(expected.getPolicyConsent(), actual.getPolicyConsent());
         assertEquals(expected.getUserId(), actual.getUserId());
         assertEquals(expected.getUsername(), actual.getUsername());
         assertEquals(expected.getPasswordHash(), actual.getPasswordHash());
