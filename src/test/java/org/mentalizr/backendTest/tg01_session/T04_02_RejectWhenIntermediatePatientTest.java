@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T04_02_RejectWhenIntermediateTest extends T04_00_RejectUnauthorizedAllMethodsBase {
+public class T04_02_RejectWhenIntermediatePatientTest extends T04_00_RejectUnauthorizedAllMethodsBase {
 
     private static Session session;
 

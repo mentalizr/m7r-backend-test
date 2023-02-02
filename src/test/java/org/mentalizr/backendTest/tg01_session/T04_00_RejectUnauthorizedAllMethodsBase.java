@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.client.restService.admin.formData.FormDataGetAllService;
+import org.mentalizr.client.restService.generic.HtmlChunkService;
 import org.mentalizr.client.restService.patient.FormDataGetService;
 import org.mentalizr.client.restService.patient.FormDataSaveService;
 import org.mentalizr.client.restService.userAdmin.PatientGetAllService;
@@ -16,8 +17,8 @@ import org.mentalizr.serviceObjects.frontend.patient.formData.FormElementDataSO;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class T04_00_RejectUnauthorizedAllMethodsBase {
 
@@ -109,6 +110,32 @@ public abstract class T04_00_RejectUnauthorizedAllMethodsBase {
         System.out.println("\n>>> formDataGetAll >>>");
         try {
             new FormDataGetAllService("dummy", testContext.getRestCallContext()).call();
+        } catch (RestServiceConnectionException e) {
+            fail(e);
+        } catch (RestServiceHttpException e) {
+            assertEquals(401, e.getStatusCode());
+        }
+    }
+
+    @Test
+    @Order(7)
+    void chunkPatient() {
+        System.out.println("\n>>> chunk PATIENT >>>");
+        try {
+            new HtmlChunkService("PATIENT", testContext.getRestCallContext()).call();
+        } catch (RestServiceConnectionException e) {
+            fail(e);
+        } catch (RestServiceHttpException e) {
+            assertEquals(401, e.getStatusCode());
+        }
+    }
+
+    @Test
+    @Order(7)
+    void chunkTherapist() {
+        System.out.println("\n>>> chunk THERAPIST >>>");
+        try {
+            new HtmlChunkService("THERAPIST", testContext.getRestCallContext()).call();
         } catch (RestServiceConnectionException e) {
             fail(e);
         } catch (RestServiceHttpException e) {
