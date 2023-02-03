@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T04_02_RejectWhenIntermediatePatientTest extends T04_00_RejectUnauthorizedAllMethodsBase {
+public class T05_02_RejectWhenIntermediatePatientTest extends T05_00_RejectUnauthorizedAllMethodsBase {
 
     private static Session session;
 
@@ -26,7 +26,7 @@ public class T04_02_RejectWhenIntermediatePatientTest extends T04_00_RejectUnaut
     public static void setup() throws TestEntityException {
         System.out.println("\n>>> Setup >>>");
 
-        T04_00_RejectUnauthorizedAllMethodsBase.testContext = TestContext.getInstance();
+        T05_00_RejectUnauthorizedAllMethodsBase.testContext = TestContext.getInstance();
 
         session = new Session(testContext);
         session.loginAsAdmin();

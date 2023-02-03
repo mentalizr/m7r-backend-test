@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T04_01_RejectWhenLoggedOutTest extends T04_00_RejectUnauthorizedAllMethodsBase {
+public class T05_01_RejectWhenLoggedOutTest extends T05_00_RejectUnauthorizedAllMethodsBase {
 
     @BeforeAll
     public static void setup() throws TestEntityException {
         System.out.println("\n>>> Setup >>>");
 
-        T04_00_RejectUnauthorizedAllMethodsBase.testContext = TestContext.getInstance();
+        T05_00_RejectUnauthorizedAllMethodsBase.testContext = TestContext.getInstance();
 
         Session session = new Session(testContext);
         session.logout();

@@ -20,7 +20,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public abstract class T04_00_RejectUnauthorizedAllMethodsBase {
+public abstract class T05_00_RejectUnauthorizedAllMethodsBase {
 
     public static TestContext testContext;
 
