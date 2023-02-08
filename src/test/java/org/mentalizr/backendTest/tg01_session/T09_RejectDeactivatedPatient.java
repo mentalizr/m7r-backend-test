@@ -10,11 +10,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T09_RejectDeactivatedTherapist {
+public class T09_RejectDeactivatedPatient {
 
     private static TestContext testContext;
     private static Session session;
+
+    private static Program program;
     private static Therapist therapist;
+    private static Patient patient;
 
     @BeforeAll
     public static void setup() throws TestEntityException {
@@ -25,8 +28,15 @@ public class T09_RejectDeactivatedTherapist {
         session = new Session(testContext);
         session.loginAsAdmin();
 
-        therapist = new Therapist03(testContext);
+        program = new ProgramTest(testContext);
+        program.create();
+
+        therapist = new Therapist01(testContext);
         therapist.create();
+
+        patient = new Patient04(program, therapist, testContext);
+
+        patient.create();
 
         session.logout();
     }
@@ -37,7 +47,9 @@ public class T09_RejectDeactivatedTherapist {
 
         session.loginAsAdmin();
 
+        patient.delete();
         therapist.delete();
+        program.delete();
 
         session.logout();
     }
@@ -47,11 +59,13 @@ public class T09_RejectDeactivatedTherapist {
     void login() {
         System.out.println("\n>>> login >>>");
 
-        RestServiceHttpException e = Assertions.assertThrows(RestServiceHttpException.class, () -> new LoginService(
-                therapist.getTherapistRestoreSO().getUsername(),
-                therapist.getPassword(),
-                testContext.getRestCallContext()
-        ).call());
+        RestServiceHttpException e = Assertions.assertThrows(RestServiceHttpException.class, () -> {
+            new LoginService(
+                    patient.getPatientRestoreSO().getUsername(),
+                    patient.getPassword(),
+                    testContext.getRestCallContext()
+            ).call();
+        });
 
         assertEquals(401, e.getStatusCode());
     }

@@ -3,12 +3,15 @@ package org.mentalizr.backendTest.tg01_session;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.mentalizr.backendTest.commons.TestContext;
+import org.mentalizr.client.restService.RestService;
 import org.mentalizr.client.restService.admin.formData.FormDataGetAllService;
 import org.mentalizr.client.restService.generic.HtmlChunkService;
 import org.mentalizr.client.restService.patient.FormDataGetService;
 import org.mentalizr.client.restService.patient.FormDataSaveService;
 import org.mentalizr.client.restService.userAdmin.PatientGetAllService;
 import org.mentalizr.client.restService.userAdmin.PatientGetService;
+import org.mentalizr.client.restService.userAdmin.UserActivateService;
+import org.mentalizr.client.restService.userAdmin.UserDeactivateService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
 import org.mentalizr.serviceObjects.frontend.patient.formData.FormDataSO;
@@ -17,23 +20,16 @@ import org.mentalizr.serviceObjects.frontend.patient.formData.FormElementDataSO;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class T05_00_RejectUnauthorizedAllMethodsBase {
 
     public static TestContext testContext;
 
-    // Add all methods here that should only not be accessible in session state VALID.
-
-    @Test
-    @Order(2)
-    void getPatient() {
-        System.out.println("\n>>> getPatient >>>");
+    protected void assertUnauthorizedException(RestService service) {
         try {
-            new PatientGetService(
-                    "dummy",
-                    testContext.getRestCallContext()).call();
+            service.call();
         } catch (RestServiceConnectionException e) {
             fail(e);
         } catch (RestServiceHttpException e) {
@@ -41,18 +37,20 @@ public abstract class T05_00_RejectUnauthorizedAllMethodsBase {
         }
     }
 
+    // Add all methods here that should only not be accessible in session state VALID.
+
+    @Test
+    @Order(2)
+    void getPatient() {
+        System.out.println("\n>>> getPatient >>>");
+        assertUnauthorizedException(new PatientGetService("dummy", testContext.getRestCallContext()));
+    }
+
     @Test
     @Order(3)
     void getAllPatients() {
         System.out.println("\n>>> getPatient >>>");
-        try {
-            new PatientGetAllService(
-                    testContext.getRestCallContext()).call();
-        } catch (RestServiceConnectionException e) {
-            fail(e);
-        } catch (RestServiceHttpException e) {
-            assertEquals(401, e.getStatusCode());
-        }
+        assertUnauthorizedException(new PatientGetAllService(testContext.getRestCallContext()));
     }
 
     @Test
@@ -95,53 +93,42 @@ public abstract class T05_00_RejectUnauthorizedAllMethodsBase {
     @Order(5)
     void formDataGet() {
         System.out.println("\n>>> formDataGet >>>");
-        try {
-            new FormDataGetService("dummy_content_id", testContext.getRestCallContext()).call();
-        } catch (RestServiceConnectionException e) {
-            fail(e);
-        } catch (RestServiceHttpException e) {
-            assertEquals(401, e.getStatusCode());
-        }
+        assertUnauthorizedException(new FormDataGetService("dummy_content_id", testContext.getRestCallContext()));
     }
 
     @Test
     @Order(6)
     void formDataGetAll() {
         System.out.println("\n>>> formDataGetAll >>>");
-        try {
-            new FormDataGetAllService("dummy", testContext.getRestCallContext()).call();
-        } catch (RestServiceConnectionException e) {
-            fail(e);
-        } catch (RestServiceHttpException e) {
-            assertEquals(401, e.getStatusCode());
-        }
+        assertUnauthorizedException(new FormDataGetAllService("dummy", testContext.getRestCallContext()));
     }
 
     @Test
     @Order(7)
     void chunkPatient() {
         System.out.println("\n>>> chunk PATIENT >>>");
-        try {
-            new HtmlChunkService("PATIENT", testContext.getRestCallContext()).call();
-        } catch (RestServiceConnectionException e) {
-            fail(e);
-        } catch (RestServiceHttpException e) {
-            assertEquals(401, e.getStatusCode());
-        }
+        assertUnauthorizedException(new HtmlChunkService("PATIENT", testContext.getRestCallContext()));
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     void chunkTherapist() {
         System.out.println("\n>>> chunk THERAPIST >>>");
-        try {
-            new HtmlChunkService("THERAPIST", testContext.getRestCallContext()).call();
-        } catch (RestServiceConnectionException e) {
-            fail(e);
-        } catch (RestServiceHttpException e) {
-            assertEquals(401, e.getStatusCode());
-        }
+        assertUnauthorizedException(new HtmlChunkService("THERAPIST", testContext.getRestCallContext()));
     }
 
+    @Test
+    @Order(9)
+    void deactivateUser() {
+        System.out.println("\n>>> deactivate user >>>");
+        assertUnauthorizedException(new UserDeactivateService("dummy", testContext.getRestCallContext()));
+    }
+
+    @Test
+    @Order(9)
+    void activateUser() {
+        System.out.println("\n>>> activate user >>>");
+        assertUnauthorizedException(new UserActivateService("dummy", testContext.getRestCallContext()));
+    }
 
 }

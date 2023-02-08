@@ -4,9 +4,7 @@ import de.arthurpicht.utils.core.strings.Strings;
 import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.backendTest.entities.*;
-import org.mentalizr.client.restService.sessionManagement.LoginAccessKeyService;
-import org.mentalizr.client.restService.sessionManagement.LoginService;
-import org.mentalizr.client.restService.sessionManagement.LogoutService;
+import org.mentalizr.client.restService.generic.ConsentPolicyService;
 import org.mentalizr.client.restService.sessionManagement.SessionStatusService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
@@ -17,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T03_LoginLogoutAsAccessKeyUserTest {
+public class T07_FulfillPolicyConsentAccessKeyUserTest {
 
     private static TestContext testContext;
     private static Session session;
@@ -45,12 +43,15 @@ public class T03_LoginLogoutAsAccessKeyUserTest {
         accessKeyUser.create();
 
         session.logout();
+
+        session.login(accessKeyUser);
     }
 
     @AfterAll
     public static void cleanup() throws TestEntityException {
         System.out.println("\n>>> Clean-up >>>");
 
+        session.logout();
         session.loginAsAdmin();
 
         accessKeyUser.delete();
@@ -62,13 +63,14 @@ public class T03_LoginLogoutAsAccessKeyUserTest {
 
     @Test
     @Order(1)
-    void login() {
-        System.out.println("\n>>> login >>>");
+    void statusPreConsent() {
+        System.out.println("\n>>> session status - pre consent >>>");
         try {
-            new LoginAccessKeyService(
-                    accessKeyUser.getAccessKey(),
-                    testContext.getRestCallContext()
-            ).call();
+            SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
+            assertTrue(SessionStatusSOs.isIntermediate(sessionStatusSO));
+            assertEquals("ANONYMOUS_PATIENT", sessionStatusSO.getUserRole());
+            assertTrue(Strings.isSpecified(sessionStatusSO.getSessionId()));
+            assertEquals("POLICY_CONSENT", sessionStatusSO.getRequire());
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }
@@ -76,14 +78,10 @@ public class T03_LoginLogoutAsAccessKeyUserTest {
 
     @Test
     @Order(2)
-    void status() {
-        System.out.println("\n>>> session status >>>");
+    void consent() {
+        System.out.println("\n>>> consent policy >>>");
         try {
-            SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
-            assertTrue(SessionStatusSOs.isIntermediate(sessionStatusSO));
-            assertEquals("POLICY_CONSENT", sessionStatusSO.getRequire());
-            assertEquals("ANONYMOUS_PATIENT", sessionStatusSO.getUserRole());
-            assertTrue(Strings.isSpecified(sessionStatusSO.getSessionId()));
+            new ConsentPolicyService(testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }
@@ -91,25 +89,17 @@ public class T03_LoginLogoutAsAccessKeyUserTest {
 
     @Test
     @Order(3)
-    void logout() {
-        System.out.println("\n>>> logout >>>");
+    void statusPostConsent() {
+        System.out.println("\n>>> session status - post consent >>>");
         try {
-            new LogoutService(testContext.getRestCallContext()).call();
+            SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
+            assertTrue(SessionStatusSOs.isValid(sessionStatusSO));
+            assertEquals("ANONYMOUS_PATIENT", sessionStatusSO.getUserRole());
+            assertTrue(Strings.isSpecified(sessionStatusSO.getSessionId()));
+            assertTrue(Strings.isNullOrEmpty(sessionStatusSO.getRequire()));
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }
     }
 
-    @Test
-    @Order(4)
-    void statusAfterLogout() {
-        System.out.println("\n>>> status after Logout >>>");
-        try {
-            SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
-            assertFalse(SessionStatusSOs.isValid(sessionStatusSO));
-        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            System.out.println("ERROR >>> " + e.getMessage());
-            fail(e);
-        }
-    }
 }

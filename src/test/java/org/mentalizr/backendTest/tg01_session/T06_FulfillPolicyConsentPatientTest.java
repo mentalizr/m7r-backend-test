@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T06_FulfillPolicyConsentTest {
+public class T06_FulfillPolicyConsentPatientTest {
 
     private static TestContext testContext;
     private static Session session;
