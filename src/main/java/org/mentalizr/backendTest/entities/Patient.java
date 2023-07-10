@@ -3,7 +3,6 @@ package org.mentalizr.backendTest.entities;
 import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.client.restService.admin.formData.FormDataCleanService;
 import org.mentalizr.client.restService.admin.patientStatus.PatientStatusDeleteService;
-import org.mentalizr.client.restService.patient.ProgramContentService;
 import org.mentalizr.client.restService.userAdmin.PatientAddService;
 import org.mentalizr.client.restService.userAdmin.PatientDeleteService;
 import org.mentalizr.client.restService.userAdmin.PatientGetAllService;
@@ -18,64 +17,45 @@ import java.util.Optional;
 
 public abstract class Patient extends TestEntity {
 
-    protected String id;
-    protected String passwordHash;
+    protected PatientRestoreSO patientRestoreSO;
+    protected Program program;
+    protected Therapist therapist;
 
-    public Patient(TestContext testContext) {
+    public Patient(Program program, Therapist therapist, TestContext testContext) {
         super(testContext);
+        this.program = program;
+        this.therapist = therapist;
     }
 
-    public abstract boolean isActive();
+    public abstract PatientAddSO getPatientAddSO();
 
-    public abstract String getUsername();
-
-    public abstract String getFirstname();
-
-    public abstract String getLastname();
-
-    public abstract int getGender();
-
-    public abstract String getEmail();
-
-    public abstract String getPassword();
-
-    public abstract boolean isBlocking();
-
-    public String getPasswordHash() {
-        return this.passwordHash;
+    public String getUserId() {
+        if (this.patientRestoreSO == null) throw new IllegalStateException("Patient not created yet.");
+        return this.patientRestoreSO.getUserId();
     }
 
-    public String getId() {
-        return this.id;
+    public String getUsername() {
+        return this.getPatientAddSO().getUsername();
     }
 
-    public PatientAddSO getPatientAddSO(String therapistId, String programId) {
-        PatientAddSO patientAddSO = new PatientAddSO();
-        patientAddSO.setActive(isActive());
-        patientAddSO.setUsername(getUsername());
-        patientAddSO.setFirstname(getFirstname());
-        patientAddSO.setLastname(getLastname());
-        patientAddSO.setGender(getGender());
-        patientAddSO.setEmail(getEmail());
-        patientAddSO.setPassword(getPassword());
-        patientAddSO.setTherapistId(therapistId);
-        patientAddSO.setProgramId(programId);
-        patientAddSO.setBlocking(isBlocking());
-        return patientAddSO;
+    public String getPassword() {
+        return this.getPatientAddSO().getPassword();
     }
 
-    public PatientAddSO create(String therapistId, String programId) throws TestEntityException {
-        PatientAddSO patientAddSO = getPatientAddSO(therapistId, programId);
+    public PatientRestoreSO getPatientRestoreSO() {
+        if (this.patientRestoreSO == null) throw new IllegalStateException("Patient not created yet.");
+        return this.patientRestoreSO;
+    }
+
+    public PatientAddSO create() throws TestEntityException {
+        PatientAddSO patientAddSO = getPatientAddSO();
 
         try {
             PatientAddSO patientAddSOReturn
                     = new PatientAddService(patientAddSO, this.testContext.getRestCallContext()).call();
-
-            this.id = patientAddSOReturn.getUserId();
-            this.passwordHash = patientAddSOReturn.getPasswordHash();
-
+            this.patientRestoreSO
+                    = new PatientGetService(patientAddSO.getUsername(), this.testContext.getRestCallContext()).call();
             return patientAddSOReturn;
-
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             throw new TestEntityException(e.getMessage(), e);
         }
@@ -83,7 +63,10 @@ public abstract class Patient extends TestEntity {
 
     public void cleanFormData() throws TestEntityException {
         try {
-            new FormDataCleanService(this.id, testContext.getRestCallContext()).call();
+            new FormDataCleanService(
+                    getUserId(),
+                    this.testContext.getRestCallContext()
+            ).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             System.out.println("ERROR >>> " + e.getMessage());
             throw new TestEntityException(e.getMessage(), e);
@@ -92,7 +75,10 @@ public abstract class Patient extends TestEntity {
 
     public void deletePatientStatus() throws TestEntityException {
         try {
-            new PatientStatusDeleteService(this.id, testContext.getRestCallContext()).call();
+            new PatientStatusDeleteService(
+                    getUserId(),
+                    testContext.getRestCallContext()
+            ).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             System.out.println("ERROR >>> " + e.getMessage());
             throw new TestEntityException(e.getMessage(), e);
@@ -101,7 +87,9 @@ public abstract class Patient extends TestEntity {
 
     public void delete() throws TestEntityException {
         try {
-            new PatientDeleteService(getUsername(), testContext.getRestCallContext()).call();
+            new PatientDeleteService(
+                    getUsername(),
+                    this.testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             System.out.println("ERROR >>> " + e.getMessage());
             throw new TestEntityException(e.getMessage(), e);
@@ -110,7 +98,9 @@ public abstract class Patient extends TestEntity {
 
     public PatientRestoreSO get() throws TestEntityException {
         try {
-            return new PatientGetService(getUsername(), testContext.getRestCallContext()).call();
+            return new PatientGetService(
+                    getUsername(),
+                    this.testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             throw new TestEntityException(e.getMessage(), e);
         }
@@ -128,11 +118,11 @@ public abstract class Patient extends TestEntity {
                 = patientRestoreCollectionSO
                 .getCollection()
                 .stream()
-                .filter(patientRestoreSO -> patientRestoreSO.getUsername().equals(getUsername()))
+                .filter(patientRestoreSO -> patientRestoreSO.getUsername().equals(this.patientRestoreSO.getUsername()))
                 .findAny();
 
         if (patientRestoreSOOptional.isEmpty())
-            throw new TestEntityNotFoundException("Patient [" + getUsername() + "] not found.");
+            throw new TestEntityNotFoundException("Patient [" + this.patientRestoreSO.getUsername() + "] not found.");
 
         return patientRestoreSOOptional.get();
     }

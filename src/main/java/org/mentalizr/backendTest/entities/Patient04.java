@@ -3,22 +3,22 @@ package org.mentalizr.backendTest.entities;
 import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.serviceObjects.userManagement.PatientAddSO;
 
-public class Patient02 extends Patient {
+public class Patient04 extends Patient {
 
-    public Patient02(Program program, Therapist therapist, TestContext testContext) {
+    public Patient04(Program program, Therapist therapist, TestContext testContext) {
         super(program, therapist, testContext);
     }
 
     @Override
     public PatientAddSO getPatientAddSO() {
         PatientAddSO patientAddSO = new PatientAddSO();
-        patientAddSO.setActive(true);
+        patientAddSO.setActive(false);
         patientAddSO.setRequirePolicyConsent(false);
-        patientAddSO.setUsername("autotest_patient_02");
+        patientAddSO.setUsername("autotest_patient_01");
         patientAddSO.setPassword("topsecret");
-        patientAddSO.setEmail("patient02@example.org");
-        patientAddSO.setFirstname("patient_02_firstname");
-        patientAddSO.setLastname("patient_02_lastname");
+        patientAddSO.setEmail("patient01@example.org");
+        patientAddSO.setFirstname("patient_01_firstname");
+        patientAddSO.setLastname("patient_01_lastname");
         patientAddSO.setGender(1);
         patientAddSO.setRequire2FA(false);
         patientAddSO.setRequireEmailConfirmation(false);

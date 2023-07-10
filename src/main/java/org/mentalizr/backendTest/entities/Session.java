@@ -1,6 +1,7 @@
 package org.mentalizr.backendTest.entities;
 
 import org.mentalizr.backendTest.commons.TestContext;
+import org.mentalizr.client.restService.sessionManagement.LoginAccessKeyService;
 import org.mentalizr.client.restService.sessionManagement.LoginService;
 import org.mentalizr.client.restService.sessionManagement.LogoutService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
@@ -26,12 +27,16 @@ public class Session {
         }
     }
 
-    public void loginAsPatient(Patient patient) throws TestEntityException {
+    public void login(Patient patient) throws TestEntityException {
         loginAsUser(patient.getUsername(), patient.getPassword());
     }
 
-    public void loginAsTherapist(Therapist therapist) throws TestEntityException {
+    public void login(Therapist therapist) throws TestEntityException {
         loginAsUser(therapist.getUsername(), therapist.getPassword());
+    }
+
+    public void login(AccessKeyUser accessKeyUser) throws TestEntityException {
+        loginAsAccessKey(accessKeyUser.getAccessKey());
     }
 
     public void loginAsUser(String user, String password) throws TestEntityException {
@@ -40,6 +45,18 @@ public class Session {
                     user,
                     password,
                     this.testContext.getRestCallContext()).call();
+        } catch (RestServiceHttpException | RestServiceConnectionException e) {
+            System.out.println("ERROR >>> " + e.getMessage());
+            throw new TestEntityException(e.getMessage(), e);
+        }
+    }
+
+    public void loginAsAccessKey(String accessKey) throws TestEntityException {
+        try {
+            new LoginAccessKeyService(
+                    accessKey,
+                    this.testContext.getRestCallContext()
+            ).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             System.out.println("ERROR >>> " + e.getMessage());
             throw new TestEntityException(e.getMessage(), e);

@@ -1,29 +1,25 @@
-package org.mentalizr.backendTest.tg03_patient;
+package org.mentalizr.backendTest.tg07_htmlChunks;
 
-import de.arthurpicht.utils.core.strings.Strings;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.backendTest.entities.*;
-import org.mentalizr.client.restService.patient.ApplicationConfigService;
+import org.mentalizr.client.restService.generic.HtmlChunkService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
-import org.mentalizr.serviceObjects.frontend.patient.ApplicationConfigPatientSO;
-import org.mentalizr.serviceObjects.frontend.patient.ApplicationConfigPatientSOX;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SuppressWarnings("NewClassNamingConvention")
-public class T02_ApplicationConfigPatientTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class T04_PatientChunk {
 
     private static TestContext testContext;
     private static Session session;
-
     private static Program program;
     private static Therapist therapist;
     private static Patient patient;
+
 
     @BeforeAll
     public static void setup() throws TestEntityException {
@@ -45,7 +41,7 @@ public class T02_ApplicationConfigPatientTest {
 
         session.logout();
 
-        session.loginAsUser(patient.getUsername(), patient.getPassword());
+        session.login(patient);
     }
 
     @AfterAll
@@ -63,21 +59,13 @@ public class T02_ApplicationConfigPatientTest {
     }
 
     @Test
-    void applicationConfig() {
-        System.out.println("\n>>> application config >>>");
-
-        ApplicationConfigPatientSO applicationConfigPatientSO;
+    @Order(2)
+    void getChunk() {
+        System.out.println("\n>>> PATIENT chunk >>>");
         try {
-            applicationConfigPatientSO = new ApplicationConfigService(testContext.getRestCallContext()).call();
-
-            System.out.println(ApplicationConfigPatientSOX.toJsonWithFormatting(applicationConfigPatientSO));
-
-            // There is no mechanism for binding a special project configuration in case of testing.
-            // We are leaving this with some superficial tests:
-
-            assertTrue(Strings.isSpecified(applicationConfigPatientSO.getLogo()));
-            assertTrue(Strings.isSpecified(applicationConfigPatientSO.getName()));
-
+            String chunk = new HtmlChunkService("PATIENT", testContext.getRestCallContext()).call();
+            assertTrue(chunk.trim().startsWith("<!-- Step Wrapper -->"));
+            assertTrue(chunk.contains("Mein Programm: {{name}}"));
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }

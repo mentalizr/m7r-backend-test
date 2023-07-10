@@ -6,6 +6,7 @@ import org.mentalizr.backendTest.entities.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T01_CreateDeleteProgramTest {
 

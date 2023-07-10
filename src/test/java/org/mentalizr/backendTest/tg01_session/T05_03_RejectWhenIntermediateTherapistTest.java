@@ -4,8 +4,6 @@ import de.arthurpicht.utils.core.strings.Strings;
 import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.backendTest.entities.*;
-import org.mentalizr.client.restService.sessionManagement.LoginService;
-import org.mentalizr.client.restService.sessionManagement.LogoutService;
 import org.mentalizr.client.restService.sessionManagement.SessionStatusService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
@@ -16,9 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T02_LoginLogoutAsPatientTest {
+public class T05_03_RejectWhenIntermediateTherapistTest extends T05_00_RejectUnauthorizedAllMethodsBase {
 
-    private static TestContext testContext;
     private static Session session;
 
     private static Program program;
@@ -29,7 +26,7 @@ public class T02_LoginLogoutAsPatientTest {
     public static void setup() throws TestEntityException {
         System.out.println("\n>>> Setup >>>");
 
-        testContext = TestContext.getInstance();
+        T05_00_RejectUnauthorizedAllMethodsBase.testContext = TestContext.getInstance();
 
         session = new Session(testContext);
         session.loginAsAdmin();
@@ -37,19 +34,22 @@ public class T02_LoginLogoutAsPatientTest {
         program = new ProgramTest(testContext);
         program.create();
 
-        therapist = new Therapist01(testContext);
+        therapist = new Therapist02(testContext);
         therapist.create();
 
-        patient = new Patient01(program, therapist, testContext);
+        patient = new Patient03(program, therapist, testContext);
         patient.create();
 
         session.logout();
+
+        session.login(therapist);
     }
 
     @AfterAll
     public static void cleanup() throws TestEntityException {
         System.out.println("\n>>> Clean-up >>>");
 
+        session.logout();
         session.loginAsAdmin();
 
         patient.delete();
@@ -61,54 +61,18 @@ public class T02_LoginLogoutAsPatientTest {
 
     @Test
     @Order(1)
-    void login() {
-        System.out.println("\n>>> login >>>");
-        try {
-            new LoginService(
-                    patient.getPatientRestoreSO().getUsername(),
-                    patient.getPassword(),
-                    testContext.getRestCallContext()
-            ).call();
-        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            fail(e);
-        }
-    }
-
-    @Test
-    @Order(2)
     void status() {
         System.out.println("\n>>> session status >>>");
         try {
             SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
-            assertTrue(SessionStatusSOs.isValid(sessionStatusSO));
-            assertEquals("LOGIN_PATIENT", sessionStatusSO.getUserRole());
+            assertTrue(SessionStatusSOs.isIntermediate(sessionStatusSO));
+            assertEquals("THERAPIST", sessionStatusSO.getUserRole());
             assertTrue(Strings.isSpecified(sessionStatusSO.getSessionId()));
+            assertEquals("POLICY_CONSENT", sessionStatusSO.getRequire());
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }
     }
 
-    @Test
-    @Order(3)
-    void logout() {
-        System.out.println("\n>>> logout >>>");
-        try {
-            new LogoutService(testContext.getRestCallContext()).call();
-        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            fail(e);
-        }
-    }
-
-    @Test
-    @Order(4)
-    void statusAfterLogout() {
-        System.out.println("\n>>> status after Logout >>>");
-        try {
-            SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
-            assertFalse(SessionStatusSOs.isValid(sessionStatusSO));
-        } catch (RestServiceHttpException | RestServiceConnectionException e) {
-            System.out.println("ERROR >>> " + e.getMessage());
-            fail(e);
-        }
-    }
+    // find test cases in base class
 }

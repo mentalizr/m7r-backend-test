@@ -18,6 +18,7 @@ import org.mentalizr.serviceObjects.frontend.therapist.feedbackSubmission.Feedba
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T04_Feedback {
 
@@ -44,11 +45,11 @@ public class T04_Feedback {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient = new Patient01(testContext);
-        patient.create(therapist.getId(), program.getProgramId());
+        patient = new Patient01(program, therapist, testContext);
+        patient.create();
 
         session.logout();
-        session.loginAsPatient(patient);
+        session.login(patient);
 
         formData = new FormDataExercise01(testContext);
         formData.send(patient);
@@ -84,7 +85,7 @@ public class T04_Feedback {
         }
 
         assertEquals(formData.getContentId(), formDataSO.getContentId());
-        assertEquals(patient.getId(), formDataSO.getUserId());
+        assertEquals(patient.getUserId(), formDataSO.getUserId());
 
         assertTrue(FormDataSOs.isExercise(formDataSO));
         ExerciseSO exerciseSOReturn = formDataSO.getExercise();
@@ -100,10 +101,10 @@ public class T04_Feedback {
     void submitFeedback() throws TestEntityException {
         System.out.println("\n>>> submitFeedback >>>");
 
-        session.loginAsTherapist(therapist);
+        session.login(therapist);
 
         FeedbackSubmissionSO feedbackSubmissionSO = new FeedbackSubmissionSO();
-        feedbackSubmissionSO.setUserId(patient.getId());
+        feedbackSubmissionSO.setUserId(patient.getUserId());
         feedbackSubmissionSO.setContentId(formData.getContentId());
         feedbackSubmissionSO.setFeedback("Some feedback text.");
 
@@ -123,7 +124,7 @@ public class T04_Feedback {
     void loadFeedback() throws TestEntityException {
         System.out.println("\n>>> loadFeedback >>>");
 
-        session.loginAsPatient(patient);
+        session.login(patient);
 
         FormDataSO formDataSO;
         try {
@@ -135,7 +136,7 @@ public class T04_Feedback {
         }
 
         assertEquals(formData.getContentId(), formDataSO.getContentId());
-        assertEquals(patient.getId(), formDataSO.getUserId());
+        assertEquals(patient.getUserId(), formDataSO.getUserId());
 
         assertTrue(FormDataSOs.isExercise(formDataSO));
         ExerciseSO exerciseSOReturn = formDataSO.getExercise();

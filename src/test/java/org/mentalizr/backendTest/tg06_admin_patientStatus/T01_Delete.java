@@ -13,6 +13,7 @@ import org.mentalizr.serviceObjects.frontend.patient.PatientStatusSO;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T01_Delete {
 
@@ -40,12 +41,12 @@ public class T01_Delete {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient1 = new Patient01(testContext);
-        patient1.create(therapist.getId(), program.getProgramId());
+        patient1 = new Patient01(program, therapist, testContext);
+        patient1.create();
 
         session.logout();
 
-        session.loginAsPatient(patient1);
+        session.login(patient1);
         new ProgramContentService(contentId, testContext.getRestCallContext()).call();
         session.logout();
     }
@@ -70,17 +71,17 @@ public class T01_Delete {
     void delete() throws RestServiceConnectionException, RestServiceHttpException, TestEntityException {
         System.out.println("\n>>> delete >>>");
 
-        session.loginAsPatient(patient1);
+        session.login(patient1);
         PatientStatusSO patientStatusSO = new PatientStatusService(testContext.getRestCallContext()).call();
         assertTrue(Strings.isSpecified(patientStatusSO.getLastContentId()));
         assertEquals(contentId, patientStatusSO.getLastContentId());
         session.logout();
 
         session.loginAsAdmin();
-        new PatientStatusDeleteService(patient1.getId(), testContext.getRestCallContext()).call();
+        new PatientStatusDeleteService(patient1.getUserId(), testContext.getRestCallContext()).call();
         session.logout();
 
-        session.loginAsPatient(patient1);
+        session.login(patient1);
         patientStatusSO = new PatientStatusService(testContext.getRestCallContext()).call();
         assertFalse(Strings.isSpecified(patientStatusSO.getLastContentId()));
         session.logout();

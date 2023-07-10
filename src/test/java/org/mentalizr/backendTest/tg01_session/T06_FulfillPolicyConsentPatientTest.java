@@ -1,20 +1,21 @@
-package org.mentalizr.backendTest.tg03_patient;
+package org.mentalizr.backendTest.tg01_session;
 
 import de.arthurpicht.utils.core.strings.Strings;
 import org.junit.jupiter.api.*;
 import org.mentalizr.backendTest.commons.TestContext;
 import org.mentalizr.backendTest.entities.*;
-import org.mentalizr.client.restService.patient.PatientStatusService;
-import org.mentalizr.client.restService.patient.ProgramContentService;
+import org.mentalizr.client.restService.generic.ConsentPolicyService;
+import org.mentalizr.client.restService.sessionManagement.SessionStatusService;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceConnectionException;
 import org.mentalizr.client.restServiceCaller.exception.RestServiceHttpException;
-import org.mentalizr.serviceObjects.frontend.patient.PatientStatusSO;
+import org.mentalizr.serviceObjects.SessionStatusSO;
+import org.mentalizr.serviceObjects.SessionStatusSOs;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class T03_PatientStatusTest {
+public class T06_FulfillPolicyConsentPatientTest {
 
     private static TestContext testContext;
     private static Session session;
@@ -22,8 +23,6 @@ public class T03_PatientStatusTest {
     private static Program program;
     private static Therapist therapist;
     private static Patient patient;
-
-    private static final String contentId = "test_m1_sm1_s1";
 
     @BeforeAll
     public static void setup() throws TestEntityException {
@@ -40,7 +39,7 @@ public class T03_PatientStatusTest {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient = new Patient01(program, therapist, testContext);
+        patient = new Patient03(program, therapist, testContext);
         patient.create();
 
         session.logout();
@@ -55,7 +54,6 @@ public class T03_PatientStatusTest {
         session.logout();
         session.loginAsAdmin();
 
-        patient.deletePatientStatus();
         patient.delete();
         therapist.delete();
         program.delete();
@@ -65,22 +63,25 @@ public class T03_PatientStatusTest {
 
     @Test
     @Order(1)
-    void patientStatusOnFirstLogin() {
-        System.out.println("\nn>>> patient status on first login >>>");
+    void statusPreConsent() {
+        System.out.println("\n>>> session status - pre consent >>>");
         try {
-            PatientStatusSO patientStatusSO = new PatientStatusService(testContext.getRestCallContext()).call();
-            assertFalse(Strings.isSpecified(patientStatusSO.getLastContentId()));
-        } catch (RestServiceConnectionException | RestServiceHttpException e) {
+            SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
+            assertTrue(SessionStatusSOs.isIntermediate(sessionStatusSO));
+            assertEquals("LOGIN_PATIENT", sessionStatusSO.getUserRole());
+            assertTrue(Strings.isSpecified(sessionStatusSO.getSessionId()));
+            assertEquals("POLICY_CONSENT", sessionStatusSO.getRequire());
+        } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }
     }
 
     @Test
     @Order(2)
-    void fetchAnyContent() {
-        System.out.println("\nn>>> fetch any content >>>");
+    void consent() {
+        System.out.println("\n>>> consent policy >>>");
         try {
-            new ProgramContentService(contentId, testContext.getRestCallContext()).call();
+            new ConsentPolicyService(testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }
@@ -88,13 +89,15 @@ public class T03_PatientStatusTest {
 
     @Test
     @Order(3)
-    void patientStatusAfterSystemInteraction() {
-        System.out.println("\nn>>> patient status after system interaction >>>");
+    void statusPostConsent() {
+        System.out.println("\n>>> session status - post consent >>>");
         try {
-            PatientStatusSO patientStatusSO = new PatientStatusService(testContext.getRestCallContext()).call();
-            assertTrue(Strings.isSpecified(patientStatusSO.getLastContentId()));
-            assertEquals(contentId, patientStatusSO.getLastContentId());
-        } catch (RestServiceConnectionException | RestServiceHttpException e) {
+            SessionStatusSO sessionStatusSO = new SessionStatusService(testContext.getRestCallContext()).call();
+            assertTrue(SessionStatusSOs.isValid(sessionStatusSO));
+            assertEquals("LOGIN_PATIENT", sessionStatusSO.getUserRole());
+            assertTrue(Strings.isSpecified(sessionStatusSO.getSessionId()));
+            assertTrue(Strings.isNullOrEmpty(sessionStatusSO.getRequire()));
+        } catch (RestServiceHttpException | RestServiceConnectionException e) {
             fail(e);
         }
     }

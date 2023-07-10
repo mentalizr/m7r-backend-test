@@ -1,51 +1,33 @@
 package org.mentalizr.backendTest.entities;
 
 import org.mentalizr.backendTest.commons.TestContext;
+import org.mentalizr.serviceObjects.userManagement.PatientAddSO;
 
 public class Patient01 extends Patient {
 
-    public Patient01(TestContext testContext) {
-        super(testContext);
+    public Patient01(Program program, Therapist therapist, TestContext testContext) {
+        super(program, therapist, testContext);
     }
 
     @Override
-    public boolean isActive() {
-        return true;
-    }
+    public PatientAddSO getPatientAddSO() {
+        PatientAddSO patientAddSO = new PatientAddSO();
+        patientAddSO.setActive(true);
+        patientAddSO.setRequirePolicyConsent(false);
+        patientAddSO.setUsername("autotest_patient_01");
+        patientAddSO.setPassword("topsecret");
+        patientAddSO.setEmail("patient01@example.org");
+        patientAddSO.setFirstname("patient_01_firstname");
+        patientAddSO.setLastname("patient_01_lastname");
+        patientAddSO.setGender(1);
+        patientAddSO.setRequire2FA(false);
+        patientAddSO.setRequireEmailConfirmation(false);
+        patientAddSO.setRequireRenewPassword(false);
+        patientAddSO.setProgramId(this.program.getProgramId());
+        patientAddSO.setBlocking(true);
+        patientAddSO.setTherapistId(this.therapist.getUserId());
 
-    @Override
-    public String getUsername() {
-        return "autotest_patient_01";
-    }
-
-    @Override
-    public String getFirstname() {
-        return "patient_01_firstname";
-    }
-
-    @Override
-    public String getLastname() {
-        return "patient_01_lastname";
-    }
-
-    @Override
-    public int getGender() {
-        return 1;
-    }
-
-    @Override
-    public String getEmail() {
-        return "patient01@example.org";
-    }
-
-    @Override
-    public String getPassword() {
-        return "topsecret";
-    }
-
-    @Override
-    public boolean isBlocking() {
-        return true;
+        return patientAddSO;
     }
 
 }

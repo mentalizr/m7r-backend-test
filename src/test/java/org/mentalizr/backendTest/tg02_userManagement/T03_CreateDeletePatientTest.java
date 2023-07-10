@@ -9,6 +9,7 @@ import org.mentalizr.serviceObjects.userManagement.PatientRestoreSO;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T03_CreateDeletePatientTest {
 
@@ -50,22 +51,26 @@ public class T03_CreateDeletePatientTest {
     public void createPatient() {
         System.out.println("\n>>> create patient >>>");
 
-        patient = new Patient01(testContext);
+        patient = new Patient01(program, therapist, testContext);
         try {
-            PatientAddSO patientAddSOReturn = patient.create(therapist.getId(), program.getProgramId());
+            PatientAddSO patientAddSOReturn = patient.create();
 
-            assertEquals(patient.isActive(), patientAddSOReturn.isActive());
-            assertEquals(patient.getUsername(), patientAddSOReturn.getUsername());
-            assertEquals(patient.getFirstname(), patientAddSOReturn.getFirstname());
-            assertEquals(patient.getLastname(), patientAddSOReturn.getLastname());
-            assertEquals(patient.getGender(), patientAddSOReturn.getGender());
-            assertEquals(patient.getEmail(), patientAddSOReturn.getEmail());
+            assertEquals(patient.getPatientAddSO().isActive(), patientAddSOReturn.isActive());
+            assertEquals(patient.getPatientAddSO().isRequirePolicyConsent(), patientAddSOReturn.isRequirePolicyConsent());
+            assertEquals(patient.getPatientAddSO().getUsername(), patientAddSOReturn.getUsername());
+            assertEquals(patient.getPatientAddSO().getEmail(), patientAddSOReturn.getEmail());
             assertTrue(Strings.isSpecified(patientAddSOReturn.getUserId()));
             assertEquals(patient.getPassword(), patientAddSOReturn.getPassword());
             assertTrue(Strings.isSpecified(patientAddSOReturn.getPasswordHash()));
+            assertEquals(patient.getPatientAddSO().getFirstname(), patientAddSOReturn.getFirstname());
+            assertEquals(patient.getPatientAddSO().getLastname(), patientAddSOReturn.getLastname());
+            assertEquals(patient.getPatientAddSO().getGender(), patientAddSOReturn.getGender());
+            assertEquals(patient.getPatientAddSO().isRequire2FA(), patientAddSOReturn.isRequire2FA());
+            assertEquals(patient.getPatientAddSO().isRequireEmailConfirmation(), patientAddSOReturn.isRequireEmailConfirmation());
+            assertEquals(patient.getPatientAddSO().isRequireRenewPassword(), patientAddSOReturn.isRequireRenewPassword());
             assertEquals(program.getProgramId(), patientAddSOReturn.getProgramId());
-            assertEquals(patient.isBlocking(), patientAddSOReturn.isBlocking());
-            assertEquals(therapist.getId(), patientAddSOReturn.getTherapistId());
+            assertEquals(patient.getPatientAddSO().isBlocking(), patientAddSOReturn.isBlocking());
+            assertEquals(therapist.getUserId(), patientAddSOReturn.getTherapistId());
 
         } catch (TestEntityException e) {
             fail(e);
@@ -79,17 +84,18 @@ public class T03_CreateDeletePatientTest {
 
         try {
             PatientRestoreSO patientRestoreSO = patient.get();
+            assertEquals(patient.getPatientRestoreSO(), patientRestoreSO);
 
-            assertEquals(patient.getId(), patientRestoreSO.getUserId());
-            assertEquals(patient.isActive(), patientRestoreSO.isActive());
-            assertEquals(patient.getUsername(), patientRestoreSO.getUsername());
-            assertEquals(patient.getPasswordHash(), patientRestoreSO.getPasswordHash());
-            assertEquals(patient.getEmail(), patientRestoreSO.getEmail());
-            assertEquals(patient.getFirstname(), patientRestoreSO.getFirstname());
-            assertEquals(patient.getLastname(), patientRestoreSO.getLastname());
-            assertEquals(patient.getGender(), patientRestoreSO.getGender());
-            assertEquals(patient.isBlocking(), patientRestoreSO.isBlocking());
-            assertEquals(therapist.getId(), patientRestoreSO.getTherapistId());
+//            assertEquals(patient.getPatientAddSO().getUserId(), patientRestoreSO.getUserId());
+//            assertEquals(patient.getPatientAddSO().isActive(), patientRestoreSO.isActive());
+//            assertEquals(patient.getPatientAddSO().getUsername(), patientRestoreSO.getUsername());
+//            assertEquals(patient.getPatientAddSO().getPasswordHash(), patientRestoreSO.getPasswordHash());
+//            assertEquals(patient.getPatientAddSO().getEmail(), patientRestoreSO.getEmail());
+//            assertEquals(patient.getPatientAddSO().getFirstname(), patientRestoreSO.getFirstname());
+//            assertEquals(patient.getPatientAddSO().getLastname(), patientRestoreSO.getLastname());
+//            assertEquals(patient.getPatientAddSO().getGender(), patientRestoreSO.getGender());
+//            assertEquals(patient.getPatientAddSO().isBlocking(), patientRestoreSO.isBlocking());
+//            assertEquals(therapist.getId(), patientRestoreSO.getTherapistId());
 
         } catch (TestEntityException e) {
             fail(e);
@@ -103,17 +109,18 @@ public class T03_CreateDeletePatientTest {
 
         try {
             PatientRestoreSO patientRestoreSO = patient.find();
+            assertEquals(patient.getPatientRestoreSO(), patientRestoreSO);
 
-            assertEquals(patient.getId(), patientRestoreSO.getUserId());
-            assertEquals(patient.isActive(), patientRestoreSO.isActive());
-            assertEquals(patient.getUsername(), patientRestoreSO.getUsername());
-            assertEquals(patient.getPasswordHash(), patientRestoreSO.getPasswordHash());
-            assertEquals(patient.getEmail(), patientRestoreSO.getEmail());
-            assertEquals(patient.getFirstname(), patientRestoreSO.getFirstname());
-            assertEquals(patient.getLastname(), patientRestoreSO.getLastname());
-            assertEquals(patient.getGender(), patientRestoreSO.getGender());
-            assertEquals(patient.isBlocking(), patientRestoreSO.isBlocking());
-            assertEquals(therapist.getId(), patientRestoreSO.getTherapistId());
+//            assertEquals(patient.getId(), patientRestoreSO.getUserId());
+//            assertEquals(patient.isActive(), patientRestoreSO.isActive());
+//            assertEquals(patient.getUsername(), patientRestoreSO.getUsername());
+//            assertEquals(patient.getPasswordHash(), patientRestoreSO.getPasswordHash());
+//            assertEquals(patient.getEmail(), patientRestoreSO.getEmail());
+//            assertEquals(patient.getFirstname(), patientRestoreSO.getFirstname());
+//            assertEquals(patient.getLastname(), patientRestoreSO.getLastname());
+//            assertEquals(patient.getGender(), patientRestoreSO.getGender());
+//            assertEquals(patient.isBlocking(), patientRestoreSO.isBlocking());
+//            assertEquals(therapist.getId(), patientRestoreSO.getTherapistId());
 
         } catch (TestEntityException | TestEntityNotFoundException e) {
             fail(e);

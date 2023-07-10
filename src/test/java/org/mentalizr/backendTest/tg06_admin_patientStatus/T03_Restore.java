@@ -12,6 +12,7 @@ import org.mentalizr.serviceObjects.frontend.patient.PatientStatusSO;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T03_Restore {
 
@@ -39,8 +40,8 @@ public class T03_Restore {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient1 = new Patient01(testContext);
-        patient1.create(therapist.getId(), program.getProgramId());
+        patient1 = new Patient01(program, therapist, testContext);
+        patient1.create();
     }
 
     @AfterAll
@@ -64,7 +65,7 @@ public class T03_Restore {
         System.out.println("\n>>> delete >>>");
 
         PatientStatusSO patientStatusSO = new PatientStatusSO();
-        patientStatusSO.setUserId(patient1.getId());
+        patientStatusSO.setUserId(patient1.getUserId());
         patientStatusSO.setLastContentId(contentId);
 
         new PatientStatusRestoreService(patientStatusSO, testContext.getRestCallContext()).call();
@@ -72,7 +73,7 @@ public class T03_Restore {
         PatientStatusCollectionSO patientStatusCollectionSO =
                 new PatientStatusGetAllService(testContext.getRestCallContext()).call();
 
-        PatientStatusSO patientStatusSOReturn = getPatientStatus(patient1.getId(), patientStatusCollectionSO);
+        PatientStatusSO patientStatusSOReturn = getPatientStatus(patient1.getUserId(), patientStatusCollectionSO);
         assertEquals(contentId, patientStatusSOReturn.getLastContentId());
 
     }

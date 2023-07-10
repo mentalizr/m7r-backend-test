@@ -14,6 +14,7 @@ import org.mentalizr.serviceObjects.backup.FormDataCollectionSOX;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SuppressWarnings("NewClassNamingConvention")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class T01_GetAll {
 
@@ -41,11 +42,11 @@ public class T01_GetAll {
         therapist = new Therapist01(testContext);
         therapist.create();
 
-        patient = new Patient01(testContext);
-        patient.create(therapist.getId(), program.getProgramId());
+        patient = new Patient01(program, therapist, testContext);
+        patient.create();
 
         session.logout();
-        session.loginAsPatient(patient);
+        session.login(patient);
 
         formData = new FormDataExercise01(testContext);
         formData.send(patient);
@@ -79,7 +80,7 @@ public class T01_GetAll {
 
         FormDataCollectionSO formDataCollectionSO;
         try {
-            formDataCollectionSO = new FormDataGetAllService(patient.getId(), testContext.getRestCallContext()).call();
+            formDataCollectionSO = new FormDataGetAllService(patient.getUserId(), testContext.getRestCallContext()).call();
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
