@@ -43,7 +43,8 @@ public class T03_PolicyChunk {
     void consent() {
         System.out.println("\n>>> POLICY chunk >>>");
         try {
-            String chunk = new HtmlChunkService("POLICY", testContext.getRestCallContext()).call();
+            String chunk = new HtmlChunkService("POLICY_CONSENT", testContext.getRestCallContext()).call();
+            System.out.println(chunk);
             assertTrue(chunk.trim().startsWith("<div class=\"container"));
             assertTrue(chunk.contains("Bitte akzeptieren Sie die Datenschutz- und Nutzungsbedingungen."));
         } catch (RestServiceHttpException | RestServiceConnectionException e) {
