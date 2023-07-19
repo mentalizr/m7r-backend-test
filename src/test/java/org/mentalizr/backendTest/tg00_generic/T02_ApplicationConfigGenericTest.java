@@ -35,6 +35,7 @@ public class T02_ApplicationConfigGenericTest {
 
             System.out.println(ApplicationConfigGenericSOX.toJsonWithFormatting(applicationConfigGenericSO));
 
+            assertEquals("vbox-m7r-dev", applicationConfigGenericSO.getDomainName());
             assertEquals("mentalizr", applicationConfigGenericSO.getTitle());
             assertEquals("LOGO_mentalizr.png", applicationConfigGenericSO.getLogo());
 
